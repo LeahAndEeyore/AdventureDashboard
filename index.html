@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Daily Adventure Cockpit</title>
+  
+  <!-- Standalone Mobile App Configuration -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#121212">
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Adventure%20Cockpit%22%2C%22short_name%22%3A%22Cockpit%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23121212%22%2C%22theme_color%22%3A%22%23121212%22%7D">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; min-height: 100vh; background-color: #121212; color: #e0e0e0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 14px;
+    }
+    .container { width: 100%; max-width: 580px; margin: 0 auto; }
+    
+    /* Headers & Navigation */
+    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    h1 { color: #ffffff; font-size: 21px; font-weight: 700; margin: 0; }
+    .close-x { color: #e74c3c; text-decoration: none; font-size: 26px; font-weight: bold; line-height: 1; cursor: pointer; }
+    .close-x:hover { color: #ff5c5c; }
+    
+    /* Buttons */
+    .primary-btn { display: block; text-align: center; background: #2980b9; color: #fff; padding: 11px 16px; border-radius: 8px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.3); cursor: pointer; border: none; width: 100%; }
+    .primary-btn:hover { background: #3498db; }
+    .sec-btn { text-align: center; color: #fff; padding: 9px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; }
+    
+    /* Dashboard Cards */
+    .card { background: #1a1a1a; padding: 16px; border-radius: 10px; border: 1px solid #2e2e2e; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .alert-card { border: 2px solid #e74c3c; background: #251414; cursor: pointer; }
+    .label { font-size: 16px; font-weight: 600; color: #bbb; }
+    .value { font-size: 16px; font-weight: 700; padding: 5px 12px; border-radius: 6px; background: #262626; color: #fff; text-align: right; }
+    
+    /* Forms & Inputs */
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 13px; color: #bbb; margin-bottom: 4px; font-weight: 600; }
+    input, select, textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #1e1e1e; color: #fff; font-size: 14px; }
+    textarea { height: 90px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { outline: none; }
+    
+    /* Desktop Full-Box Indicator Stretch Fix */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0; padding: 0; opacity: 0; cursor: pointer;
+    }
+
+    /* Checkboxes */
+    .checkbox-row { display: flex; align-items: center; gap: 10px; background: #222; padding: 10px; border-radius: 6px; border: 1px solid #333; margin-top: 10px; }
+    .checkbox-row input { width: 18px; height: 18px; cursor: pointer; }
+    .checkbox-row label { margin: 0; cursor: pointer; color: #ddd; font-size: 13px; font-weight: 600; }
+
+    /* Asset Manager Specifics */
+    .preview-wrapper { margin-top: 14px; background: #141414; border: 1px solid #282828; border-radius: 8px; padding: 12px; }
+    .img-container { position: relative; width: 100%; max-width: 380px; margin: 0 auto; }
+    #previewImg { width: 100%; border-radius: 8px; max-height: 440px; object-fit: contain; display: block; }
+    
+    .switch-pill {
+      position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.8);
+      border: 1px solid #444; border-radius: 16px; display: flex; overflow: hidden; backdrop-filter: blur(4px); cursor: pointer;
+    }
+    .switch-segment { padding: 4px 10px; font-size: 11px; font-weight: 700; color: #888; transition: all 0.2s ease; }
+    .switch-segment.active { background: #d35400; color: #fff; }
+    
+    .overlay-prompt { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.75); color: #fff; border: 1px solid #555; border-radius: 14px; padding: 4px 10px; font-size: 12px; font-weight: 700; cursor: pointer; backdrop-filter: blur(4px); }
+    .overlay-prompt:hover { background: #2980b9; border-color: #2980b9; }
+
+    .caption-box { font-family: 'Georgia', serif; font-style: italic; font-size: 14px; color: #bbb; margin-top: 12px; line-height: 1.4; text-align: center; cursor: pointer; padding: 6px 8px; border-radius: 6px; border-bottom: 1px dashed #555; }
+    .caption-box:hover { background: #1f1f1f; color: #fff; border-bottom-color: #d35400; }
+
+    /* AI-yore Chat */
+    .chat-box { height: clamp(300px, 54vh, 520px); overflow-y: auto; background: #141414; border: 1px solid #282828; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+    .msg { margin-bottom: 8px; padding: 8px 12px; border-radius: 8px; font-size: 14px; line-height: 1.4; max-width: 86%; word-wrap: break-word; }
+    .ai { background: #1f2d3a; color: #e1ecf4; align-self: flex-start; border-left: 3px solid #3498db; }
+    .user { background: #27672b; color: #fff; margin-left: auto; text-align: right; }
+    .chips-row { display: flex; gap: 6px; margin-bottom: 8px; overflow-x: auto; padding-bottom: 2px; }
+    .chip { background: #242424; border: 1px solid #383838; color: #ddd; padding: 6px 10px; border-radius: 14px; font-size: 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+    
+    /* Alerts & Dialogs */
+    #statusBox { margin-top: 12px; padding: 12px; border-radius: 8px; font-size: 13px; display: none; line-height: 1.4; }
+    .success { background: #1e3a29; border: 1px solid #27ae60; color: #2ecc71; }
+    .error { background: #3a1e1e; border: 1px solid #c0392b; color: #e74c3c; }
+
+    .view-panel { display: none; }
+    .view-active { display: block; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- ========================================== -->
+    <!-- 1. DASHBOARD VIEW                          -->
+    <!-- ========================================== -->
+    <div id="viewDashboard" class="view-panel view-active">
+      <div class="header-row">
+        <h1>&#9874;&#65039; Daily Adventure Cockpit</h1>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+        <button onclick="switchView('ai_chat')" class="primary-btn">&#128172; AI-yore Assistant</button>
+        <div style="display:flex; gap:8px; min-height:84px;">
+          <button onclick="switchView('asset_manager')" class="sec-btn" style="background:#d35400; flex:2; display:flex; align-items:center; justify-content:center; line-height:1.3; font-size:15px; font-weight:700;">
+            &#10024; Asset<br>Manager
+          </button>
+          <div style="flex:3; display:flex; flex-direction:column; gap:6px;">
+            <button onclick="openPreviewModal()" class="sec-btn" style="background:#27ae60; flex:1;">&#9993;&#xFE0F; Preview a Date</button>
+            <button onclick="switchView('custom_event')" class="sec-btn" style="background:#8e44ad; flex:1;">&#9200; Custom Event</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="label">Broadcast Status</span>
+        <span id="dashBroadcastStatus" class="value">Loading...</span>
+      </div>
+
+      <div id="dashTriggerCard" style="display:none;" class="card alert-card" onclick="promptFixTriggers()">
+        <div>
+          <span class="label" style="color:#e74c3c;">&#9940; Critical Anchor Missing</span>
+          <p style="font-size:12px; color:#bbb; margin-top:3px;">1:00 AM Maintenance Clerk not found. Tap to restore.</p>
+        </div>
+        <span class="value" style="background:#c0392b; color:#fff; cursor:pointer;">Fix Now &#9874;&#65039;</span>
+      </div>
+
+      <div class="card">
+        <span class="label">Active Subscribers</span>
+        <span id="dashSubscribers" class="value">...</span>
+      </div>
+
+      <div id="dashBudgetCard" class="card" style="display:none;">
+        <span class="label">Project Email Budget</span>
+        <span id="dashBudgetValue" class="value">...</span>
+      </div>
+
+      <div class="card" style="flex-direction:column; align-items:flex-start; gap:8px;">
+        <span class="label">Stockpile Reserve</span>
+        <span id="dashStockpile" class="value" style="width:100%; text-align:left; font-size:14px; padding:10px 12px; line-height:1.5;">Loading vault...</span>
+      </div>
+
+      <div class="card">
+        <span class="label">Prompt Fail Rate</span>
+        <span id="dashPromptFail" class="value" style="font-size:14px; line-height:1.3;">...</span>
+      </div>
+
+      <div id="dashCheckinCard" class="card">
+        <span class="label">Last Check-in</span>
+        <span id="dashCheckin" class="value">...</span>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 2. CUSTOM EVENT VIEW                       -->
+    <!-- ========================================== -->
+    <div id="viewCustomEvent" class="view-panel">
+      <div class="card">
+        <div class="header-row">
+          <h2 style="font-size:19px; color:#8e44ad; margin:0; font-weight:700;">&#9200; Create 1-Off Custom Event</h2>
+          <span onclick="switchView('dashboard')" class="close-x" title="Return to Dashboard">&times;</span>
+        </div>
+
+        <div class="form-group">
+          <label>Select Module</label>
+          <select id="ceTargetModule"></select>
+        </div>
+        <div class="form-group">
+          <label>Occasion Date</label>
+          <div style="position:relative; background:#1e1e1e; border:1px solid #333; border-radius:6px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+            <span id="ceDateDisplay" style="font-size:15px; font-weight:600; color:#fff;">Oct 28</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e44ad" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; pointer-events:none;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <input type="date" id="ceEventDate" onclick="try{this.showPicker()}catch(e){}" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer;" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Occasion Title *</label>
+          <input type="text" id="ceOccasionTitle" placeholder="e.g. Moonie's Birthday!" />
+        </div>
+        <div class="form-group">
+          <label>Custom Instructions / Narrative</label>
+          <textarea id="ceCustomInstructions" placeholder="Describe what happens in this custom adventure..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Negative Instructions (Optional)</label>
+          <input type="text" id="ceNegativeInstructions" placeholder="e.g. Ignore Eeyore and the absurd element" />
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="ceAnimateEvent" />
+          <label for="ceAnimateEvent">Animate with Gif Wrapper?</label>
+        </div>
+
+        <button class="primary-btn" id="ceSubmitBtn" onclick="submitCustomEvent()" style="background:#8e44ad; margin-top:14px;">Generate Assets</button>
+        <div id="ceStatusBox"></div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. ASSET MANAGER VIEW                      -->
+    <!-- ========================================== -->
+    <div id="viewAssetManager" class="view-panel">
+      <div class="card">
+        <div class="header-row">
+          <h2 style="font-size:19px; color:#d35400; margin:0; font-weight:700;">&#10024; Asset Manager</h2>
+          <span onclick="switchView('dashboard')" class="close-x" title="Return to Dashboard">&times;</span>
+        </div>
+
+        <div class="form-group">
+          <label>Select Module</label>
+          <select id="amTargetModule" onchange="loadAssetManagerList()"></select>
+        </div>
+        <div class="form-group">
+          <label>Select Asset</label>
+          <select id="amTargetAsset" onchange="updateAssetPreview()"></select>
+        </div>
+
+        <div id="amPreviewContainer" class="preview-wrapper" style="display:none;">
+          <div class="img-container">
+            <img id="amPreviewImg" src="" alt="Artwork Preview" />
+            <div id="amSwitchPill" class="switch-pill" onclick="toggleGifPreview()" style="display:none;" title="Switch preview format">
+              <span id="amJpgSeg" class="switch-segment active">JPG</span>
+              <span id="amGifSeg" class="switch-segment">GIF</span>
+            </div>
+            <button class="overlay-prompt" onclick="openPromptEditor()">&#9997;&#xFE0F; Edit Prompt</button>
+          </div>
+          <div id="amCaptionDisplay" class="caption-box" onclick="openCaptionEditor()" title="Tap to edit caption"></div>
+        </div>
+
+        <div id="amActionControls" style="display:none; margin-top:12px;">
+          <div class="checkbox-row">
+            <input type="checkbox" id="amRegenCheck" onchange="validateAmReady()" />
+            <label for="amRegenCheck">Regenerate Image?</label>
+          </div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="amAnimateCheck" onchange="validateAmReady()" />
+            <label for="amAnimateCheck">Animate with Gif Wrapper?</label>
+          </div>
+          <button class="primary-btn" id="amSubmitBtn" onclick="submitAssetManagerAction()" style="background:#d35400; margin-top:14px;" disabled>Generate Assets</button>
+        </div>
+
+        <div id="amStatusBox"></div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 4. AI-YORE ASSISTANT VIEW                  -->
+    <!-- ========================================== -->
+    <div id="viewAiChat" class="view-panel">
+      <div class="header-row">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <h2 style="font-size:18px; color:#3498db; margin:0; font-weight:700;">&#10024; AI-yore Assistant</h2>
+          <button onclick="clearChatHistory()" style="background:none; border:none; color:#777; text-decoration:underline; cursor:pointer; font-size:11px;">Reset Chat</button>
+        </div>
+        <span onclick="switchView('dashboard')" class="close-x" title="Return to Dashboard">&times;</span>
+      </div>
+
+      <div class="card" style="padding:10px; flex-direction:column; align-items:stretch;">
+        <div class="chat-box" id="chatLogs"></div>
+
+        <div class="chips-row">
+          <button class="chip" onclick="sendQuickChat('I am the NEW Admin')">&#128100; I am the NEW Admin</button>
+          <button class="chip" onclick="sendQuickChat('Why didn\'t Leah get email?')">&#9993; Why didn't Leah get email?</button>
+          <button class="chip" onclick="sendQuickChat('Test billing health')">&#128179; Test Billing Health</button>
+        </div>
+
+        <div style="display:flex; gap:6px;">
+          <input type="text" id="chatInput" placeholder="Ask AI-yore a question..." onkeydown="if(event.key==='Enter') sendChatMessage()" />
+          <button onclick="sendChatMessage()" id="chatSendBtn" class="primary-btn" style="width:auto; padding:10px 18px;">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PREVIEW MODAL                              -->
+    <!-- ========================================== -->
+    <div id="previewModal" onclick="if(event.target===this) closePreviewModal()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #2e2e2e; border-radius:12px; padding:20px; width:90%; max-width:400px; text-align:center; position:relative;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3 style="color:#27ae60; margin:0;">&#9993;&#xFE0F; Preview Report by Date</h3>
+          <span onclick="closePreviewModal()" class="close-x">&times;</span>
+        </div>
+        <p style="font-size:13px; color:#bbb; margin-bottom:14px; text-align:left;">Pick any calendar date to receive a test report email as if it were that morning.</p>
+        
+        <div style="position:relative; background:#1e1e1e; border:1px solid #333; border-radius:6px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; cursor:pointer;">
+          <span id="modalDateFormatted" style="font-size:15px; font-weight:600; color:#fff;">Loading...</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; pointer-events:none;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <input type="date" id="modalDate" onclick="try{this.showPicker()}catch(e){}" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer;" />
+        </div>
+
+        <div id="modalFarewellRow" style="margin-bottom:14px; text-align:left; background:#222; padding:9px 12px; border-radius:6px; border:1px solid #333; display:flex; align-items:center; gap:10px;">
+          <input type="checkbox" id="modalFarewellCheck" style="width:18px; height:18px; cursor:pointer;" />
+          <label for="modalFarewellCheck" style="font-size:13px; color:#ddd; cursor:pointer; margin:0;">Include Farewell Letter Preview</label>
+        </div>
+
+        <div style="display:flex; flex-direction:row; gap:10px; width:100%;">
+          <button onclick="submitPreviewRequest()" id="modalSubmitBtn" class="primary-btn" style="background:#27ae60; flex:2;">Send Preview</button>
+          <button onclick="closePreviewModal()" class="sec-btn" style="background:#333; flex:1;">Cancel</button>
+        </div>
+        <p id="modalStatus" style="font-size:12px; margin-top:10px; display:none;"></p>
+      </div>
+    </div>
+
+    <!-- PROMPT MODAL -->
+    <div id="amPromptModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:20px; width:90%; max-width:440px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h3 style="color:#2980b9; font-size:16px;">&#9997;&#xFE0F; Edit Asset Prompt</h3>
+          <span onclick="closePromptModal()" class="close-x">&times;</span>
+        </div>
+        <textarea id="amPromptInput" style="width:100%; height:140px; background:#1e1e1e; color:#fff; border:1px solid #333; border-radius:6px; padding:10px; font-size:13px;"></textarea>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
+          <button onclick="savePromptModal()" class="primary-btn" style="width:auto; padding:8px 16px;">Save Prompt</button>
+          <button onclick="closePromptModal()" class="sec-btn" style="background:#333;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAPTION MODAL -->
+    <div id="amCaptionModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:20px; width:90%; max-width:440px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h3 style="color:#d35400; font-size:16px;">&#9997;&#xFE0F; Edit Journal Caption</h3>
+          <span onclick="closeCaptionModal()" class="close-x">&times;</span>
+        </div>
+        <p style="font-size:12px; color:#888; margin-bottom:10px;">Adjust the adventure text stored for this asset.</p>
+        <textarea id="amCaptionInput" style="width:100%; height:100px; background:#1e1e1e; color:#fff; border:1px solid #333; border-radius:6px; padding:10px; font-size:13px; font-family:'Georgia', serif;"></textarea>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
+          <button onclick="saveCaptionModal()" class="primary-btn" style="background:#d35400; width:auto; padding:8px 16px;">Save Caption</button>
+          <button onclick="closeCaptionModal()" class="sec-btn" style="background:#333;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUSTOM CONFIRM / ALERT MODAL -->
+    <div id="dialogModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2500; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:22px; width:90%; max-width:380px; text-align:center;">
+        <h3 id="dialogTitle" style="color:#fff; font-size:18px; margin-bottom:10px;"></h3>
+        <p id="dialogMessage" style="font-size:14px; color:#bbb; line-height:1.5; margin-bottom:18px; white-space:pre-line;"></p>
+        <div id="dialogButtons" style="display:flex; gap:10px; justify-content:center;"></div>
+      </div>
+    </div>
+
+    <!-- ACCESS RESTRICTED UNLOCK VIEW -->
+    <div id="viewUnlock" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#121212; z-index:5000; justify-content:center; align-items:center; padding:20px;">
+      <div class="card" style="flex-direction:column; max-width:360px; width:100%; text-align:center; padding:26px;">
+        <h2 style="color:#e74c3c; font-size:20px; margin-bottom:8px;">&#128274; Access Restricted</h2>
+        <p style="font-size:13px; color:#888; margin-bottom:18px;">Please enter your system access key to unlock the Cockpit:</p>
+        <input type="password" id="unlockKeyInput" placeholder="Enter Access Key" onkeydown="if(event.key==='Enter') submitUnlockKey()" style="text-align:center; margin-bottom:12px;" />
+        <button onclick="submitUnlockKey()" class="primary-btn">Unlock Cockpit</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Live Apps Script Engine URL
+    const ENGINE_URL = "https://script.google.com/macros/s/AKfycbwsjz_Cpn3vXepVtjDq9RmFktEd39q3Oage7TvwTaHAgravxLIrlkwk-hAAmm-_1OPy/exec";
+    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    let accessKey = "";
+    let dashboardData = null;
+    let amAssetList = [];
+    let amActiveDetails = null;
+    let amShowingGif = false;
+
+    // --- INITIALISATION & ZERO-KNOWLEDGE AUTH ---
+    function init() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlKey = urlParams.get('key');
+      
+      if (urlKey) {
+        accessKey = urlKey;
+        localStorage.setItem('adv_cockpit_key', urlKey);
+        // Strip key from browser address bar for security
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } else {
+        accessKey = localStorage.getItem('adv_cockpit_key') || "";
+      }
+
+      if (!accessKey) {
+        document.getElementById('viewUnlock').style.display = 'flex';
+        return;
+      }
+
+      refreshDashboard();
+      initChat();
+    }
+
+    function submitUnlockKey() {
+      const k = document.getElementById('unlockKeyInput').value.trim();
+      if (k) {
+        accessKey = k;
+        localStorage.setItem('adv_cockpit_key', k);
+        document.getElementById('viewUnlock').style.display = 'none';
+        refreshDashboard();
+        initChat();
+      }
+    }
+
+    // --- API CLIENT WRAPPERS ---
+    async function apiGet(action, params = {}) {
+      const q = new URLSearchParams({ api: "1", key: accessKey, action: action, ...params });
+      const res = await fetch(`${ENGINE_URL}?${q.toString()}`);
+      return await res.json();
+    }
+
+    async function apiPost(action, payload = {}) {
+      const body = { key: accessKey, action: action, ...payload };
+      const res = await fetch(ENGINE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(body)
+      });
+      return await res.json();
+    }
+
+    // --- VIEW SWITCHING ---
+    function switchView(viewName) {
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('view-active'));
+      if (viewName === 'dashboard') {
+        document.getElementById('viewDashboard').classList.add('view-active');
+        refreshDashboard();
+      } else if (viewName === 'custom_event') {
+        document.getElementById('viewCustomEvent').classList.add('view-active');
+        initCustomEventForm();
+      } else if (viewName === 'asset_manager') {
+        document.getElementById('viewAssetManager').classList.add('view-active');
+        initAssetManager();
+      } else if (viewName === 'ai_chat') {
+        document.getElementById('viewAiChat').classList.add('view-active');
+        scrollChatToBottom();
+      }
+    }
+
+    // --- DIALOG MODALS ---
+    function showAlert(title, message) {
+      document.getElementById('dialogTitle').textContent = title || "Notice";
+      document.getElementById('dialogMessage').textContent = message || "";
+      document.getElementById('dialogButtons').innerHTML = 
+        '<button onclick="closeDialog()" class="primary-btn" style="width:auto; padding:10px 24px;">OK</button>';
+      document.getElementById('dialogModal').style.display = 'flex';
+    }
+
+    function showConfirm(title, message, onConfirm, btnColor = "#27ae60") {
+      document.getElementById('dialogTitle').textContent = title || "Confirm Action";
+      document.getElementById('dialogMessage').textContent = message || "";
+      document.getElementById('dialogButtons').innerHTML = 
+        `<button id="dialogConfirmBtn" class="primary-btn" style="background:${btnColor}; width:auto; padding:10px 20px;">Confirm</button>` +
+        '<button onclick="closeDialog()" class="sec-btn" style="background:#333; padding:10px 18px;">Cancel</button>';
+      
+      document.getElementById('dialogConfirmBtn').onclick = () => { closeDialog(); if (onConfirm) onConfirm(); };
+      document.getElementById('dialogModal').style.display = 'flex';
+    }
+
+    function closeDialog() { document.getElementById('dialogModal').style.display = 'none'; }
+
+    // --- DASHBOARD CONTROLLER ---
+    async function refreshDashboard() {
+      try {
+        const data = await apiGet('get_dashboard');
+        if (!data || !data.success) throw new Error(data.msg || "Invalid key");
+        dashboardData = data;
+
+        // Broadcast status badge
+        const badge = document.getElementById('dashBroadcastStatus');
+        if (data.isHold) {
+          badge.outerHTML = '<span id="dashBroadcastStatus" class="value" onclick="promptReleaseHold()" style="color:#fff; background:#c0392b; cursor:pointer; border:1px solid #e74c3c;">HOLD &#9940; <span style="font-size:11px; font-weight:normal; display:block;">(Tap to release)</span></span>';
+        } else {
+          const color = data.status === "LIVE" ? "#2ecc71" : "#f39c12";
+          badge.outerHTML = `<span id="dashBroadcastStatus" class="value" style="color:#121212; background:${color};">${data.status}</span>`;
+        }
+
+        // Trigger warning card
+        document.getElementById('dashTriggerCard').style.display = data.hasClerk ? 'none' : 'flex';
+
+        // Subscriber numbers
+        document.getElementById('dashSubscribers').innerHTML = 
+          `${data.activeSubscribers}<br><span style="font-size:12px; font-weight:normal; color:#888;">(${data.totalDailyDeliveries} / ${data.maxDailyDeliveries} Deliveries)</span>`;
+
+        // Budget card
+        const budgetCard = document.getElementById('dashBudgetCard');
+        if (data.projectBudget < data.peakMaxDemand) {
+          budgetCard.style.display = 'flex';
+          document.getElementById('dashBudgetValue').innerHTML = 
+            `${data.projectBudget} / ${data.peakMaxDemand}<br><span style="font-size:12px; font-weight:normal; color:#888;">(Peak Load)</span>`;
+        } else {
+          budgetCard.style.display = 'none';
+        }
+
+        // Stockpile reserve lines (Yearless standardisation)
+        let holidayHtml = "";
+        if (data.holidayLines && data.holidayLines.length > 0) {
+          holidayHtml = data.holidayLines.map(h => `<br><span style="font-size:13px; font-weight:600; color:#ddd; white-space:nowrap;">${h}</span>`).join("");
+        }
+        document.getElementById('dashStockpile').innerHTML = `${data.stockpileDays}${holidayHtml}`;
+
+        // Prompt fail rate
+        document.getElementById('dashPromptFail').innerHTML = data.promptFailRate;
+
+        // Last check-in card
+        const checkinCard = document.getElementById('dashCheckinCard');
+        if (data.isLegacyMode) {
+          checkinCard.style.display = 'none';
+        } else {
+          checkinCard.style.display = 'flex';
+          const lColor = data.diffDays >= 12 ? "#e74c3c" : (data.diffDays >= 7 ? "#f39c12" : "#2ecc71");
+          document.getElementById('dashCheckin').outerHTML = 
+            `<span id="dashCheckin" class="value" style="color:#121212; background:${lColor};">${data.diffDays}d ago<br><span style="font-size:13px; font-weight:normal; color:#555;">(14d max)</span></span>`;
+        }
+
+        // Populate modal date picker initial minimum
+        const mInput = document.getElementById('modalDate');
+        mInput.min = data.minDateStr;
+        mInput.value = data.minDateStr;
+        updateModalDateDisplay();
+
+      } catch(err) {
+        showAlert("Connection Error", "Could not reach Apps Script Engine: " + err.message);
+      }
+    }
+
+    function promptReleaseHold() {
+      showConfirm("Release System HOLD?", "Switch broadcast status from HOLD to safe TEST mode?", async () => {
+        const res = await apiPost('release_hold');
+        showAlert("System Updated", res.msg);
+        refreshDashboard();
+      }, "#e74c3c");
+    }
+
+    function promptFixTriggers() {
+      showConfirm("Rebuild Master Triggers?", "Restore 1:00 AM Clerk and 4:44 AM Delivery anchors now?", async () => {
+        const res = await apiPost('fix_triggers');
+        showAlert("Triggers Restored", res.msg);
+        refreshDashboard();
+      });
+    }
+
+    // --- PREVIEW MODAL CONTROLLER ---
+    function openPreviewModal() {
+      document.getElementById('previewModal').style.display = 'flex';
+      document.getElementById('modalStatus').style.display = 'none';
+    }
+    function closePreviewModal() { document.getElementById('previewModal').style.display = 'none'; }
+
+    function updateModalDateDisplay() {
+      const val = document.getElementById('modalDate').value;
+      if (!val) return;
+      const parts = val.split('-');
+      const d = new Date(2000, parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      document.getElementById('modalDateFormatted').textContent = MONTHS[d.getMonth()] + ' ' + d.getDate();
+    }
+    document.getElementById('modalDate').addEventListener('change', updateModalDateDisplay);
+
+    async function submitPreviewRequest() {
+      const dVal = document.getElementById('modalDate').value;
+      const fCheck = document.getElementById('modalFarewellCheck').checked;
+      const status = document.getElementById('modalStatus');
+      const btn = document.getElementById('modalSubmitBtn');
+      if (!dVal) return;
+
+      btn.disabled = true;
+      status.style.display = 'block';
+      status.style.color = '#ccc';
+      status.textContent = '⚒️ Generating preview report...';
+
+      const res = await apiPost('preview_date', { dateStr: dVal, includeFarewell: fCheck });
+      btn.disabled = false;
+      status.style.color = res.success ? '#2ecc71' : '#e74c3c';
+      status.textContent = res.msg;
+    }
+
+    // --- CUSTOM EVENT CONTROLLER ---
+    function initCustomEventForm() {
+      if (!dashboardData || !dashboardData.modules) return;
+      const sel = document.getElementById('ceTargetModule');
+      sel.innerHTML = dashboardData.modules.map(m => `<option value="${m.id}">${m.name} (${m.id})</option>`).join("");
+      
+      const now = new Date();
+      now.setDate(now.getDate() + 1);
+      const minDate = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+      const dInput = document.getElementById('ceEventDate');
+      dInput.min = minDate;
+      dInput.value = minDate;
+      updateCeDateDisplay();
+    }
+
+    function updateCeDateDisplay() {
+      const val = document.getElementById('ceEventDate').value;
+      if (!val) return;
+      const parts = val.split('-');
+      const d = new Date(2000, parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      document.getElementById('ceDateDisplay').textContent = MONTHS[d.getMonth()] + ' ' + d.getDate();
+    }
+    document.getElementById('ceEventDate').addEventListener('change', updateCeDateDisplay);
+
+    function submitCustomEvent() {
+      const title = document.getElementById('ceOccasionTitle').value.trim();
+      const dateVal = document.getElementById('ceEventDate').value;
+      const statusBox = document.getElementById('ceStatusBox');
+
+      if (!title || !dateVal) {
+        statusBox.className = "error";
+        statusBox.textContent = "⚠️ Please provide an Occasion Title and Date.";
+        statusBox.style.display = "block";
+        return;
+      }
+
+      showConfirm("Generate Assets?", `Generate assets for '${title}' on ${dateVal}?`, async () => {
+        const btn = document.getElementById('ceSubmitBtn');
+        btn.disabled = true;
+        statusBox.className = "";
+        statusBox.style.display = "block";
+        statusBox.style.background = "#222";
+        statusBox.style.color = "#ccc";
+        statusBox.textContent = "⚒️ Generating custom occasion assets via Gemini... Please wait about a minute...";
+
+        const formData = {
+          moduleId: document.getElementById('ceTargetModule').value,
+          dateStr: dateVal,
+          occasionTitle: title,
+          customInstructions: document.getElementById('ceCustomInstructions').value.trim(),
+          negativeInstructions: document.getElementById('ceNegativeInstructions').value.trim(),
+          animateEvent: document.getElementById('ceAnimateEvent').checked
+        };
+
+        const res = await apiPost('custom_event', { formData: formData });
+        btn.disabled = false;
+        if (res.success) {
+          statusBox.className = "success";
+          statusBox.textContent = "✅ Success! " + res.msg;
+        } else {
+          statusBox.className = "error";
+          statusBox.textContent = "⛔ Error: " + res.msg;
+        }
+      }, "#8e44ad");
+    }
+
+    // --- ASSET MANAGER CONTROLLER ---
+    function initAssetManager() {
+      if (!dashboardData || !dashboardData.modules) return;
+      const sel = document.getElementById('amTargetModule');
+      sel.innerHTML = dashboardData.modules.map(m => `<option value="${m.id}">${m.name}</option>`).join("");
+      loadAssetManagerList();
+    }
+
+    async function loadAssetManagerList() {
+      const modId = document.getElementById('amTargetModule').value;
+      const sel = document.getElementById('amTargetAsset');
+      document.getElementById('amPreviewContainer').style.display = 'none';
+      document.getElementById('amActionControls').style.display = 'none';
+
+      sel.innerHTML = '<option value="">Loading eligible assets...</option>';
+      const res = await apiGet('get_assets', { module: modId });
+
+      if (!res.success || !res.assets || res.assets.length === 0) {
+        sel.innerHTML = '<option value="">No assets found in vault</option>';
+        return;
+      }
+
+      amAssetList = res.assets;
+      sel.innerHTML = amAssetList.map(a => `<option value="${a.baseName}">${a.label}</option>`).join("");
+      updateAssetPreview();
+    }
+
+    async function updateAssetPreview() {
+      const selBase = document.getElementById('amTargetAsset').value;
+      const item = amAssetList.find(a => a.baseName === selBase);
+      const modId = document.getElementById('amTargetModule').value;
+
+      amShowingGif = false;
+      document.getElementById('amRegenCheck').checked = false;
+      document.getElementById('amAnimateCheck').checked = false;
+      validateAmReady();
+
+      if (item && item.thumbUrl) {
+        document.getElementById('amPreviewImg').src = item.thumbUrl;
+        document.getElementById('amCaptionDisplay').textContent = "Loading caption...";
+        document.getElementById('amPreviewContainer').style.display = 'block';
+        document.getElementById('amActionControls').style.display = 'block';
+
+        const pill = document.getElementById('amSwitchPill');
+        if (item.hasGif) {
+          document.getElementById('amJpgSeg').className = 'switch-segment active';
+          document.getElementById('amGifSeg').className = 'switch-segment';
+          pill.style.display = 'flex';
+        } else {
+          pill.style.display = 'none';
+        }
+
+        const res = await apiGet('get_asset_details', { module: modId, baseName: selBase });
+        amActiveDetails = (res.success && res.details) ? res.details : {};
+        document.getElementById('amCaptionDisplay').textContent = 
+          amActiveDetails.caption ? '"' + amActiveDetails.caption + '"' : '(No caption recorded)';
+      }
+    }
+
+    function toggleGifPreview() {
+      const selBase = document.getElementById('amTargetAsset').value;
+      const item = amAssetList.find(a => a.baseName === selBase);
+      if (!item || !item.hasGif) return;
+
+      const img = document.getElementById('amPreviewImg');
+      const jpgSeg = document.getElementById('amJpgSeg');
+      const gifSeg = document.getElementById('amGifSeg');
+
+      if (amShowingGif) {
+        img.src = item.thumbUrl;
+        amShowingGif = false;
+        jpgSeg.className = 'switch-segment active';
+        gifSeg.className = 'switch-segment';
+      } else {
+        // High-res direct preview from Google Drive
+        img.src = `https://drive.google.com/thumbnail?id=${item.gifId}&sz=w600`;
+        amShowingGif = true;
+        jpgSeg.className = 'switch-segment';
+        gifSeg.className = 'switch-segment active';
+      }
+    }
+
+    function openPromptEditor() {
+      if (!amActiveDetails) return;
+      document.getElementById('amPromptInput').value = amActiveDetails.prompt || "";
+      document.getElementById('amPromptModal').style.display = 'flex';
+    }
+    function closePromptModal() { document.getElementById('amPromptModal').style.display = 'none'; }
+    function savePromptModal() {
+      amActiveDetails.prompt = document.getElementById('amPromptInput').value.trim();
+      amActiveDetails.promptDirty = true;
+      closePromptModal();
+      validateAmReady();
+      showAlert("Prompt Updated", "Prompt updated in memory. Check 'Regenerate Image?' and click 'Generate Assets' to apply.");
+    }
+
+    function openCaptionEditor() {
+      if (!amActiveDetails) return;
+      document.getElementById('amCaptionInput').value = amActiveDetails.caption || "";
+      document.getElementById('amCaptionModal').style.display = 'flex';
+    }
+    function closeCaptionModal() { document.getElementById('amCaptionModal').style.display = 'none'; }
+    function saveCaptionModal() {
+      const val = document.getElementById('amCaptionInput').value.trim();
+      amActiveDetails.caption = val;
+      amActiveDetails.captionDirty = true;
+      document.getElementById('amCaptionDisplay').textContent = val ? '"' + val + '"' : '(No caption recorded)';
+      closeCaptionModal();
+      validateAmReady();
+    }
+
+    function validateAmReady() {
+      const regen = document.getElementById('amRegenCheck').checked;
+      const anim = document.getElementById('amAnimateCheck').checked;
+      const dirty = amActiveDetails && (amActiveDetails.promptDirty || amActiveDetails.captionDirty);
+      document.getElementById('amSubmitBtn').disabled = (!regen && !anim && !dirty);
+    }
+
+    function submitAssetManagerAction() {
+      const selBase = document.getElementById('amTargetAsset').value;
+      const modId = document.getElementById('amTargetModule').value;
+      const regen = document.getElementById('amRegenCheck').checked;
+      const anim = document.getElementById('amAnimateCheck').checked;
+      const dirty = amActiveDetails && (amActiveDetails.promptDirty || amActiveDetails.captionDirty);
+
+      const confirmLines = [];
+      if (dirty) confirmLines.push("• Save prompt and caption edits to vault");
+      if (regen) confirmLines.push("• Regenerate static image via Gemini (Untamed)");
+      if (anim) confirmLines.push("• Generate 4s Omni animation & animated GIF");
+
+      showConfirm("Generate Assets?", `Perform actions for ${selBase}?\n\n` + confirmLines.join("\n"), async () => {
+        const btn = document.getElementById('amSubmitBtn');
+        const statusBox = document.getElementById('amStatusBox');
+
+        btn.disabled = true;
+        statusBox.className = "";
+        statusBox.style.display = "block";
+        statusBox.style.background = "#222";
+        statusBox.style.color = "#ccc";
+        statusBox.textContent = "⚒️ Processing asset updates via Gemini & Omni... Please wait...";
+
+        const payload = {
+          moduleId: modId,
+          baseName: selBase,
+          regenerateImage: regen,
+          animateGif: anim,
+          editedPrompt: amActiveDetails ? amActiveDetails.prompt : "",
+          editedCaption: amActiveDetails ? amActiveDetails.caption : "",
+          isPromptDirty: Boolean(amActiveDetails && amActiveDetails.promptDirty),
+          isCaptionDirty: Boolean(amActiveDetails && amActiveDetails.captionDirty)
+        };
+
+        const res = await apiPost('generate_assets', { data: payload });
+        btn.disabled = false;
+        if (res.success) {
+          statusBox.className = "success";
+          statusBox.textContent = res.msg;
+          loadAssetManagerList();
+        } else {
+          statusBox.className = "error";
+          statusBox.textContent = "⛔ Error: " + res.msg;
+        }
+      }, "#d35400");
+    }
+
+    // --- AI-YORE CHAT CONTROLLER ---
+    const CHAT_STORAGE_KEY = "adv_cockpit_aiyore_chat";
+    const DEFAULT_AI_INTRO = "Oh... hello. I'm AI-yore. Eeyore’s brother. Nobody usually expects a donkey to know cloud infrastructure, but Trevor taught me how everything works so Leah's morning adventures stay safe.<br><br>Don't worry, you can't break anything here. What would you like to check?";
+
+    function initChat() {
+      const logs = document.getElementById('chatLogs');
+      logs.innerHTML = "";
+      const saved = localStorage.getItem(CHAT_STORAGE_KEY);
+      const history = saved ? JSON.parse(saved) : [];
+
+      if (history.length === 0) {
+        history.push({ role: "ai", text: DEFAULT_AI_INTRO });
+        localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(history));
+      }
+
+      history.forEach(m => appendChatBubble(m.role, m.text));
+      scrollChatToBottom();
+    }
+
+    function appendChatBubble(role, text) {
+      const logs = document.getElementById('chatLogs');
+      const div = document.createElement("div");
+      div.className = "msg " + role;
+      div.innerHTML = text.replace(/\n/g, "<br>");
+      logs.appendChild(div);
+      scrollChatToBottom();
+    }
+
+    function scrollChatToBottom() {
+      const logs = document.getElementById('chatLogs');
+      logs.scrollTop = logs.scrollHeight;
+    }
+
+    function sendQuickChat(txt) {
+      document.getElementById('chatInput').value = txt;
+      sendChatMessage();
+    }
+
+    async function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const btn = document.getElementById('chatSendBtn');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      appendChatBubble("user", msg);
+      input.value = "";
+      btn.disabled = true;
+
+      const saved = localStorage.getItem(CHAT_STORAGE_KEY);
+      const history = saved ? JSON.parse(saved) : [];
+      history.push({ role: "user", text: msg });
+      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(history));
+
+      const loadingDiv = document.createElement("div");
+      loadingDiv.className = "msg ai";
+      loadingDiv.textContent = "AI-yore is thinking...";
+      document.getElementById('chatLogs').appendChild(loadingDiv);
+      scrollChatToBottom();
+
+      const recentTurns = history.slice(-6).map(h => ({
+        role: h.role === "ai" ? "model" : "user",
+        text: h.text
+      }));
+
+      try {
+        const res = await apiPost('chat_aiyore', { turns: recentTurns });
+        loadingDiv.remove();
+        const reply = (res && res.success) ? res.reply : "Oh well... couldn't reach the server right now.";
+        appendChatBubble("ai", reply);
+        history.push({ role: "ai", text: reply });
+        localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(history));
+      } catch(e) {
+        loadingDiv.remove();
+        appendChatBubble("ai", "Oh well... looks like I stumbled. But don't worry, your files are completely safe.");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function clearChatHistory() {
+      localStorage.removeItem(CHAT_STORAGE_KEY);
+      initChat();
+    }
+
+    // Start on page load
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>
