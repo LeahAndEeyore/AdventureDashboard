@@ -252,11 +252,11 @@
 
         <div id="amActionControls" style="display:none; margin-top:12px;">
           <div class="checkbox-row">
-            <input type="checkbox" id="amRegenCheck" onchange="validateAmReady()" />
+            <input type="checkbox" id="amRegenCheck" onchange="onAmRegenChanged()" />
             <label for="amRegenCheck">Regenerate Image?</label>
           </div>
           <div class="checkbox-row">
-            <input type="checkbox" id="amAnimateCheck" onchange="validateAmReady()" />
+            <input type="checkbox" id="amAnimateCheck" onchange="onAmAnimateChanged()" />
             <label for="amAnimateCheck">Animate with Gif Wrapper?</label>
           </div>
           <button class="primary-btn" id="amSubmitBtn" onclick="submitAssetManagerAction()" style="background:#d35400; margin-top:14px;" disabled>Generate Assets</button>
@@ -324,6 +324,37 @@
       </div>
     </div>
 
+    <!-- GIF CONFLICT MODAL (3-BUTTON) -->
+    <div id="amGifConflictModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2600; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #d35400; border-radius:12px; padding:22px; width:90%; max-width:400px; text-align:center; box-shadow:0 8px 24px rgba(0,0,0,0.6);">
+        <h3 style="color:#d35400; font-size:18px; margin-bottom:10px;">⚠️ Animated GIF Exists</h3>
+        <p style="font-size:14px; color:#bbb; line-height:1.5; margin-bottom:18px;">
+          An Animated GIF already exists for this image.<br><br>
+          When you regenerate the artwork, how would you like to handle the existing GIF?
+        </p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button onclick="resolveAmGifConflict('archive')" class="primary-btn" style="background:#2980b9; padding:10px; font-size:13px;">Archive GIF (Mark .used for Photos)</button>
+          <button onclick="resolveAmGifConflict('trash')" class="primary-btn" style="background:#c0392b; padding:10px; font-size:13px;">Delete GIF (Trash immediately)</button>
+          <button onclick="resolveAmGifConflict('cancel')" class="sec-btn" style="background:#333; padding:10px; font-size:13px;">Cancel (Keep current image)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GIF OVERWRITE MODAL (2-BUTTON) -->
+    <div id="amGifOverwriteModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2600; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #d35400; border-radius:12px; padding:22px; width:90%; max-width:380px; text-align:center; box-shadow:0 8px 24px rgba(0,0,0,0.6);">
+        <h3 style="color:#d35400; font-size:18px; margin-bottom:10px;">⚠️ Replace Existing GIF?</h3>
+        <p style="font-size:14px; color:#bbb; line-height:1.5; margin-bottom:18px;">
+          Warning! An Animated GIF already exists for the current image.<br><br>
+          Generating a new GIF will delete the old one.
+        </p>
+        <div style="display:flex; gap:10px; justify-content:center;">
+          <button onclick="resolveAmGifOverwrite(true)" class="primary-btn" style="background:#d35400; width:auto; padding:10px 24px; font-size:14px;">OK</button>
+          <button onclick="resolveAmGifOverwrite(false)" class="sec-btn" style="background:#333; padding:10px 18px; font-size:14px;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
     <!-- PROMPT MODAL -->
     <div id="amPromptModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center;">
       <div style="background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:20px; width:90%; max-width:440px;">
@@ -387,6 +418,7 @@
     let amAssetList = [];
     let amActiveDetails = null;
     let amShowingGif = false;
+    let amPendingGifDisposition = ""; // "archive", "trash", or ""
 
     // --- INITIALISATION & ZERO-KNOWLEDGE AUTH ---
     function init() {
@@ -591,7 +623,6 @@
     function initCustomEventForm() {
       if (!dashboardData || !dashboardData.modules) return;
       
-      // Standardised Module Selector (No extra ID)
       const sel = document.getElementById('ceTargetModule');
       sel.innerHTML = dashboardData.modules.map(m => `<option value="${m.id}">${m.name}</option>`).join("");
       
@@ -695,7 +726,6 @@
       sel.innerHTML = '<option value="">Loading eligible assets...</option>';
       const res = await apiGet('get_assets', { module: modId });
 
-      // If user switched modules while waiting, abort this stale response
       if (currentReq !== amRequestId) return;
 
       if (!res.success || !res.assets || res.assets.length === 0) {
@@ -715,6 +745,7 @@
 
       amShowingGif = false;
       amActiveDetails = null;
+      amPendingGifDisposition = "";
       document.getElementById('amRegenCheck').checked = false;
       document.getElementById('amAnimateCheck').checked = false;
       validateAmReady();
@@ -761,6 +792,54 @@
         jpgSeg.className = 'switch-segment';
         gifSeg.className = 'switch-segment active';
       }
+    }
+
+    function onAmRegenChanged() {
+      const regenCheck = document.getElementById('amRegenCheck');
+      const selBase = document.getElementById('amTargetAsset').value;
+      const item = amAssetList.find(a => a.baseName === selBase);
+
+      if (regenCheck.checked && item && item.hasGif) {
+        document.getElementById('amGifConflictModal').style.display = 'flex';
+      } else if (!regenCheck.checked) {
+        amPendingGifDisposition = "";
+      }
+      validateAmReady();
+    }
+
+    function resolveAmGifConflict(choice) {
+      const regenCheck = document.getElementById('amRegenCheck');
+      document.getElementById('amGifConflictModal').style.display = 'none';
+
+      if (choice === 'cancel') {
+        regenCheck.checked = false;
+        amPendingGifDisposition = "";
+      } else {
+        amPendingGifDisposition = choice;
+      }
+      validateAmReady();
+    }
+
+    function onAmAnimateChanged() {
+      const regenCheck = document.getElementById('amRegenCheck');
+      const animCheck = document.getElementById('amAnimateCheck');
+      const selBase = document.getElementById('amTargetAsset').value;
+      const item = amAssetList.find(a => a.baseName === selBase);
+
+      if (animCheck.checked && item && item.hasGif && !regenCheck.checked) {
+        document.getElementById('amGifOverwriteModal').style.display = 'flex';
+      }
+      validateAmReady();
+    }
+
+    function resolveAmGifOverwrite(proceed) {
+      const animCheck = document.getElementById('amAnimateCheck');
+      document.getElementById('amGifOverwriteModal').style.display = 'none';
+
+      if (!proceed) {
+        animCheck.checked = false;
+      }
+      validateAmReady();
     }
 
     function openPromptEditor() {
@@ -845,6 +924,7 @@
           baseName: selBase,
           regenerateImage: regen,
           animateGif: anim,
+          gifDisposition: amPendingGifDisposition,
           editedPrompt: amActiveDetails ? amActiveDetails.prompt : "",
           editedCaption: amActiveDetails ? amActiveDetails.caption : "",
           isPromptDirty: Boolean(amActiveDetails && amActiveDetails.promptDirty),
