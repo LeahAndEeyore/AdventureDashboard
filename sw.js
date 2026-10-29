@@ -1,4 +1,11 @@
-// Minimal Service Worker to satisfy Android WebAPK installation
+self.addEventListener('install', function(event) {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', function(event) {
+  event.waitUntil(self.clients.claim());
+});
+
 self.addEventListener('fetch', function(event) {
-  // Let all network requests pass through natively
+  event.respondWith(fetch(event.request));
 });
