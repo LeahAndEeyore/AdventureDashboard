@@ -3,14 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Daily Adventure Cockpit</title>
+  <title>Leah & Eeyore Adventures Project Dashboard</title>
   
   <!-- Standalone Mobile App Configuration -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#121212">
-  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Adventure%20Cockpit%22%2C%22short_name%22%3A%22Cockpit%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23121212%22%2C%22theme_color%22%3A%22%23121212%22%7D">
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -101,7 +106,7 @@
     <!-- ========================================== -->
     <div id="viewDashboard" class="view-panel view-active">
       <div class="header-row">
-        <h1>&#9874;&#65039; Daily Adventure Cockpit</h1>
+        <h1>&#9874;&#65039; Daily Adventure Project</h1>
       </div>
 
       <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
@@ -355,9 +360,9 @@
     <div id="viewUnlock" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#121212; z-index:5000; justify-content:center; align-items:center; padding:20px;">
       <div class="form-card" style="max-width:360px; width:100%; text-align:center; padding:26px;">
         <h2 style="color:#e74c3c; font-size:20px; margin-bottom:8px;">&#128274; Access Restricted</h2>
-        <p style="font-size:13px; color:#888; margin-bottom:18px;">Please enter your system access key to unlock the Cockpit:</p>
+        <p style="font-size:13px; color:#888; margin-bottom:18px;">Please enter your system access key to unlock the Dashboard:</p>
         <input type="password" id="unlockKeyInput" placeholder="Enter Access Key" onkeydown="if(event.key==='Enter') submitUnlockKey()" style="text-align:center; margin-bottom:12px;" />
-        <button onclick="submitUnlockKey()" class="primary-btn">Unlock Cockpit</button>
+        <button onclick="submitUnlockKey()" class="primary-btn">Unlock Dashboard</button>
       </div>
     </div>
 
