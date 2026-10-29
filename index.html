@@ -368,6 +368,7 @@
     const ENGINE_URL = "https://script.google.com/macros/s/AKfycbwsjz_Cpn3vXepVtjDq9RmFktEd39q3Oage7TvwTaHAgravxLIrlkwk-hAAmm-_1OPy/exec";
     const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
+    let amRequestId = 0;
     let accessKey = "";
     let dashboardData = null;
     let amAssetList = [];
@@ -425,16 +426,18 @@
     }
 
     // --- VIEW SWITCHING ---
-    function switchView(viewName) {
+    async function switchView(viewName) {
       document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('view-active'));
       if (viewName === 'dashboard') {
         document.getElementById('viewDashboard').classList.add('view-active');
         refreshDashboard();
       } else if (viewName === 'custom_event') {
         document.getElementById('viewCustomEvent').classList.add('view-active');
+        if (!dashboardData) await refreshDashboard();
         initCustomEventForm();
       } else if (viewName === 'asset_manager') {
         document.getElementById('viewAssetManager').classList.add('view-active');
+        if (!dashboardData) await refreshDashboard();
         initAssetManager();
       } else if (viewName === 'ai_chat') {
         document.getElementById('viewAiChat').classList.add('view-active');
@@ -670,6 +673,7 @@
     }
 
     async function loadAssetManagerList() {
+      const currentReq = ++amRequestId;
       const modId = document.getElementById('amTargetModule').value;
       const sel = document.getElementById('amTargetAsset');
       document.getElementById('amPreviewContainer').style.display = 'none';
@@ -677,6 +681,9 @@
 
       sel.innerHTML = '<option value="">Loading eligible assets...</option>';
       const res = await apiGet('get_assets', { module: modId });
+
+      // If user switched modules while waiting, abort this stale response
+      if (currentReq !== amRequestId) return;
 
       if (!res.success || !res.assets || res.assets.length === 0) {
         sel.innerHTML = '<option value="">No assets found in vault</option>';
@@ -775,8 +782,24 @@
     function validateAmReady() {
       const regen = document.getElementById('amRegenCheck').checked;
       const anim = document.getElementById('amAnimateCheck').checked;
-      const dirty = amActiveDetails && (amActiveDetails.promptDirty || amActiveDetails.captionDirty);
-      document.getElementById('amSubmitBtn').disabled = (!regen && !anim && !dirty);
+      const dirty = Boolean(amActiveDetails && (amActiveDetails.promptDirty || amActiveDetails.captionDirty));
+      const btn = document.getElementById('amSubmitBtn');
+
+      btn.disabled = (!regen && !anim && !dirty);
+
+      if (!regen && !anim && dirty) {
+        btn.textContent = "Save Text Edits";
+        btn.style.background = "#2980b9";
+      } else if (regen && !anim) {
+        btn.textContent = "Regenerate Artwork";
+        btn.style.background = "#d35400";
+      } else if (!regen && anim) {
+        btn.textContent = "Generate Animation";
+        btn.style.background = "#d35400";
+      } else {
+        btn.textContent = "Generate Assets";
+        btn.style.background = "#d35400";
+      }
     }
 
     function submitAssetManagerAction() {
