@@ -29,6 +29,7 @@
     /* Buttons */
     .primary-btn { display: block; text-align: center; background: #2980b9; color: #fff; padding: 11px 16px; border-radius: 8px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.3); cursor: pointer; border: none; width: 100%; }
     .primary-btn:hover { background: #3498db; }
+    .primary-btn:disabled { opacity: 0.35; cursor: not-allowed; filter: grayscale(0.8); }
     .sec-btn { text-align: center; color: #fff; padding: 9px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; }
     
     /* Dashboard Cards (Horizontal Row) */
@@ -59,8 +60,8 @@
 
     /* Asset Manager Specifics */
     .preview-wrapper { margin-top: 14px; background: #141414; border: 1px solid #282828; border-radius: 8px; padding: 12px; }
-    .img-container { position: relative; width: 100%; max-width: 380px; margin: 0 auto; }
-    #previewImg { width: 100%; border-radius: 8px; max-height: 440px; object-fit: contain; display: block; }
+    .img-container { position: relative; width: 100%; max-width: 320px; margin: 0 auto; }
+    #amPreviewImg { width: 100%; max-height: 380px; object-fit: contain; border-radius: 8px; display: block; margin: 0 auto; }
     
     .switch-pill {
       position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.8);
@@ -693,6 +694,7 @@
       const modId = document.getElementById('amTargetModule').value;
 
       amShowingGif = false;
+      amActiveDetails = null;
       document.getElementById('amRegenCheck').checked = false;
       document.getElementById('amAnimateCheck').checked = false;
       validateAmReady();
@@ -782,7 +784,9 @@
       const modId = document.getElementById('amTargetModule').value;
       const regen = document.getElementById('amRegenCheck').checked;
       const anim = document.getElementById('amAnimateCheck').checked;
-      const dirty = amActiveDetails && (amActiveDetails.promptDirty || amActiveDetails.captionDirty);
+      const dirty = Boolean(amActiveDetails && (amActiveDetails.promptDirty || amActiveDetails.captionDirty));
+
+      if (!regen && !anim && !dirty) return;
 
       const confirmLines = [];
       if (dirty) confirmLines.push("• Save prompt and caption edits to vault");
