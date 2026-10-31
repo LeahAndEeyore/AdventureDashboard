@@ -772,7 +772,7 @@
       }
     }
 
-    function toggleGifPreview() {
+    async function toggleGifPreview() {
       const selBase = document.getElementById('amTargetAsset').value;
       const item = amAssetList.find(a => a.baseName === selBase);
       if (!item || !item.hasGif) return;
@@ -787,10 +787,31 @@
         jpgSeg.className = 'switch-segment active';
         gifSeg.className = 'switch-segment';
       } else {
-        img.src = `https://drive.google.com/thumbnail?id=${item.gifId}&sz=w600`;
-        amShowingGif = true;
-        jpgSeg.className = 'switch-segment';
-        gifSeg.className = 'switch-segment active';
+        if (item.cachedGifUri) {
+          img.src = item.cachedGifUri;
+          amShowingGif = true;
+          jpgSeg.className = 'switch-segment';
+          gifSeg.className = 'switch-segment active';
+          return;
+        }
+
+        gifSeg.textContent = "...";
+        try {
+          const res = await apiGet('get_gif_preview', { fileId: item.gifId });
+          gifSeg.textContent = "GIF";
+          if (res && res.success && res.dataUri) {
+            item.cachedGifUri = res.dataUri;
+            img.src = res.dataUri;
+            amShowingGif = true;
+            jpgSeg.className = 'switch-segment';
+            gifSeg.className = 'switch-segment active';
+          } else {
+            showAlert("Preview Error", "Could not load animated GIF stream.");
+          }
+        } catch(e) {
+          gifSeg.textContent = "GIF";
+          showAlert("Preview Error", "Failed to fetch animation: " + e.message);
+        }
       }
     }
 
