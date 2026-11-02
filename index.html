@@ -932,8 +932,8 @@
       showConfirm("Generate Assets?", `Perform actions for ${selBase}?\n\n` + confirmLines.join("\n"), async () => {
         const btn = document.getElementById('amSubmitBtn');
         const statusBox = document.getElementById('amStatusBox');
-        const regen = document.getElementById('amRegenImageCheck').checked;
-        const anim = document.getElementById('amAnimateGifCheck').checked;
+        const regen = document.getElementById('amRegenCheck').checked;
+        const anim = document.getElementById('amAnimateCheck').checked;
 
         btn.disabled = true;
         statusBox.className = "";
