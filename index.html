@@ -927,7 +927,7 @@
       const confirmLines = [];
       if (dirty) confirmLines.push("• Save prompt and caption edits to vault");
       if (regen) confirmLines.push("• Regenerate static image via Gemini (Untamed)");
-      if (anim) confirmLines.push("• Generate 4s Omni animation & animated GIF");
+      if (anim) confirmLines.push("• Generate 4s Animated GIF");
 
       showConfirm("Generate Assets?", `Perform actions for ${selBase}?\n\n` + confirmLines.join("\n"), async () => {
         const btn = document.getElementById('amSubmitBtn');
@@ -943,7 +943,7 @@
         
         let loadingMsg = "⚒️ Saving text edits to vault... Please wait...";
         if (regen || anim) {
-          loadingMsg = "⚒️ Processing asset updates via Gemini & Omni... Please wait...";
+          loadingMsg = "⚒️ Processing asset updates & regeneration... Please wait...";
         }
         statusBox.textContent = loadingMsg;
 
