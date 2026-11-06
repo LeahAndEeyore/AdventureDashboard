@@ -195,9 +195,12 @@
         <span id="dashDeliveries" class="value">...</span>
       </div>
 
-      <div class="card" style="flex-direction:column; align-items:flex-start; gap:8px;">
-        <span class="label">Stockpile Reserve</span>
-        <span id="dashStockpile" class="value" style="width:100%; text-align:left; font-size:14px; padding:10px 12px; line-height:1.5;">Loading vault...</span>
+      <div class="card" style="flex-direction:column; align-items:flex-start; gap:4px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="label">Stockpile Reserve:</span>
+          <span id="dashStockpileDays" style="font-size:17px; font-weight:700; color:#fff;">...</span>
+        </div>
+        <div id="dashHolidayBox" style="width:100%; margin-top:8px; padding:10px 12px; background:#222; border-radius:6px; border:1px solid #333; line-height:1.5; display:none;"></div>
       </div>
 
       <div class="card">
@@ -1038,11 +1041,14 @@
           : "";
         document.getElementById('dashDeliveries').innerHTML = `${data.totalDailyDeliveries} / ${data.maxDailyDeliveries} Max${budgetSubText}`;
 
-        let holidayHtml = "";
+        document.getElementById('dashStockpileDays').textContent = data.stockpileDays || "0 Days";
+        const hBox = document.getElementById('dashHolidayBox');
         if (data.holidayLines && data.holidayLines.length > 0) {
-          holidayHtml = data.holidayLines.map(h => `<br><span style="font-size:13px; font-weight:600; color:#ddd; white-space:nowrap;">${h}</span>`).join("");
+          hBox.innerHTML = data.holidayLines.map(h => `<div style="font-size:13px; font-weight:600; color:#ddd; padding:2px 0;">${h}</div>`).join("");
+          hBox.style.display = 'block';
+        } else {
+          hBox.style.display = 'none';
         }
-        document.getElementById('dashStockpile').innerHTML = `${data.stockpileDays}${holidayHtml}`;
 
         document.getElementById('dashPromptFail').innerHTML = data.promptFailRate;
 
