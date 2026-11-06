@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Leah & Eeyore Adventures Project Dashboard</title>
+  <title>Leah &amp; Eeyore Adventures Project Dashboard</title>
   
   <!-- Standalone Mobile App Configuration -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -36,9 +36,16 @@
     .primary-btn { display: block; text-align: center; background: #2980b9; color: #fff; padding: 11px 16px; border-radius: 8px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.3); cursor: pointer; border: none; width: 100%; }
     .primary-btn:hover { background: #3498db; }
     .primary-btn:disabled { opacity: 0.35; cursor: not-allowed; filter: grayscale(0.8); }
-    .sec-btn { text-align: center; color: #fff; padding: 9px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; }
+    .sec-btn { text-align: center; color: #fff; padding: 10px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .action-btn { background: #b9936c; color: #fff; border: none; padding: 10px 14px; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; }
+    .action-btn:hover { background: #cca479; }
+    .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .sec-action-btn { background: #333; color: #ddd; border: 1px solid #444; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
     
-    /* Dashboard Cards (Snug 10px inner padding) */
+    /* Grid Actions (2x2) */
+    .grid-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    
+    /* Dashboard Cards */
     .card {
       background: #1a1a1a; padding: 12px 10px; border-radius: 8px;
       border: 1px solid #2e2e2e; margin-bottom: 8px; display: flex;
@@ -48,28 +55,44 @@
     .label { font-size: 16px; font-weight: 600; color: #bbb; }
     .value { font-size: 16px; font-weight: 700; padding: 5px 12px; border-radius: 6px; background: #262626; color: #fff; text-align: right; }
     
-    /* Studio Form Cards (Snug 10px inner padding) */
     .form-card {
       background: #1a1a1a; padding: 14px 10px; border-radius: 8px;
       border: 1px solid #2e2e2e; margin-bottom: 10px; display: block;
     }
 
-    /* Forms & Inputs */
     .form-group { margin-bottom: 12px; width: 100%; }
     label { display: block; font-size: 13px; color: #bbb; margin-bottom: 4px; font-weight: 600; }
     input, select, textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #1e1e1e; color: #fff; font-size: 14px; }
     textarea { height: 90px; resize: vertical; }
     input:focus, select:focus, textarea:focus { outline: none; }
     
-    /* Desktop Full-Box Indicator Stretch Fix */
     input[type="date"]::-webkit-calendar-picker-indicator {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0; padding: 0; opacity: 0; cursor: pointer;
     }
 
-    /* Checkboxes */
     .checkbox-row { display: flex; align-items: center; gap: 10px; background: #222; padding: 10px; border-radius: 6px; border: 1px solid #333; margin-top: 10px; }
     .checkbox-row input { width: 18px; height: 18px; cursor: pointer; }
     .checkbox-row label { margin: 0; cursor: pointer; color: #ddd; font-size: 13px; font-weight: 600; }
+
+    /* Module Manager Elements */
+    .mod-item { background: #222; border: 1px solid #333; border-radius: 6px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .mod-title { font-weight: bold; font-size: 15px; color: #fff; cursor: pointer; }
+    .mod-title:hover { color: #b9936c; }
+    .status-pill { font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 12px; text-transform: uppercase; user-select: none; }
+    .status-active { background: #27ae60; color: #fff; }
+    .status-paused { background: #c0392b; color: #fff; }
+    .arrow-btn { background: #333; color: #fff; border: 1px solid #444; border-radius: 4px; padding: 4px 8px; font-size: 12px; cursor: pointer; margin-left: 4px; }
+    .arrow-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .days-row { display: flex; gap: 4px; justify-content: space-between; }
+    .day-box { flex: 1; text-align: center; background: #222; border: 1px solid #333; border-radius: 4px; padding: 6px 2px; font-size: 12px; cursor: pointer; user-select: none; }
+    .day-box.selected { background: #4a4a4a; color: #fff; font-weight: bold; border-color: #777; }
+
+    .stepper-v-container { display: flex; flex-direction: column; background: #1e1e1e; border: 1px solid #333; border-radius: 6px; overflow: hidden; height: 100%; }
+    .stepper-v-btn { background: #2a2a2a; color: #fff; border: none; height: 36px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .stepper-v-display { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 38px; }
+    .stepper-input::-webkit-outer-spin-button, .stepper-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .stepper-input { -moz-appearance: textfield; }
 
     /* Asset Manager Specifics */
     .preview-wrapper { margin-top: 14px; background: #141414; border: 1px solid #282828; border-radius: 8px; padding: 12px; }
@@ -77,17 +100,21 @@
     #amPreviewImg { width: 100%; max-height: 380px; object-fit: contain; border-radius: 8px; display: block; margin: 0 auto; }
     
     .switch-pill {
-      position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.8);
+      position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.8);
       border: 1px solid #444; border-radius: 16px; display: flex; overflow: hidden; backdrop-filter: blur(4px); cursor: pointer;
     }
     .switch-segment { padding: 4px 10px; font-size: 11px; font-weight: 700; color: #888; transition: all 0.2s ease; }
     .switch-segment.active { background: #d35400; color: #fff; }
     
-    .overlay-prompt { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.75); color: #fff; border: 1px solid #555; border-radius: 14px; padding: 4px 10px; font-size: 12px; font-weight: 700; cursor: pointer; backdrop-filter: blur(4px); }
-    .overlay-prompt:hover { background: #2980b9; border-color: #2980b9; }
+    .trash-btn {
+      position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.8); border: 1px solid #555;
+      border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      font-size: 15px; cursor: pointer; backdrop-filter: blur(4px); color: #fff;
+    }
+    .trash-btn:hover { background: #c0392b; border-color: #e74c3c; }
 
+    .overlay-prompt { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.75); color: #fff; border: 1px solid #555; border-radius: 14px; padding: 4px 10px; font-size: 12px; font-weight: 700; cursor: pointer; backdrop-filter: blur(4px); }
     .caption-box { font-family: 'Georgia', serif; font-style: italic; font-size: 14px; color: #bbb; margin-top: 12px; line-height: 1.4; text-align: center; cursor: pointer; padding: 6px 8px; border-radius: 6px; border-bottom: 1px dashed #555; }
-    .caption-box:hover { background: #1f1f1f; color: #fff; border-bottom-color: #d35400; }
 
     /* AI-yore Chat */
     .chat-box { height: clamp(300px, 54vh, 520px); overflow-y: auto; background: #141414; border: 1px solid #282828; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
@@ -97,8 +124,8 @@
     .chips-row { display: flex; gap: 6px; margin-bottom: 8px; overflow-x: auto; padding-bottom: 2px; }
     .chip { background: #242424; border: 1px solid #383838; color: #ddd; padding: 6px 10px; border-radius: 14px; font-size: 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
     
-    /* Alerts & Dialogs */
-    #statusBox, #ceStatusBox, #amStatusBox { margin-top: 12px; padding: 12px; border-radius: 8px; font-size: 13px; display: none; line-height: 1.4; }
+    /* Status Boxes */
+    #statusBox, #ceStatusBox, #amStatusBox, #hubStatusBox, #editorStatusBox { margin-top: 12px; padding: 12px; border-radius: 8px; font-size: 13px; display: none; line-height: 1.4; }
     .success { background: #1e3a29; border: 1px solid #27ae60; color: #2ecc71; }
     .error { background: #3a1e1e; border: 1px solid #c0392b; color: #e74c3c; }
 
@@ -119,14 +146,11 @@
 
       <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
         <button onclick="switchView('ai_chat')" class="primary-btn">&#128172; AI-yore Assistant</button>
-        <div style="display:flex; gap:8px; min-height:84px;">
-          <button onclick="switchView('asset_manager')" class="sec-btn" style="background:#d35400; flex:2; display:flex; align-items:center; justify-content:center; line-height:1.3; font-size:15px; font-weight:700;">
-            &#10024; Asset<br>Manager
-          </button>
-          <div style="flex:3; display:flex; flex-direction:column; gap:6px;">
-            <button onclick="openPreviewModal()" class="sec-btn" style="background:#27ae60; flex:1;">&#9993;&#xFE0F; Preview a Date</button>
-            <button onclick="switchView('custom_event')" class="sec-btn" style="background:#8e44ad; flex:1;">&#9200; Custom Event</button>
-          </div>
+        <div class="grid-actions">
+          <button onclick="switchView('asset_manager')" class="sec-btn" style="background:#d35400;">&#10024; Asset Manager</button>
+          <button onclick="switchView('module_manager')" class="sec-btn" style="background:#b9936c;">&#9874;&#65039; Module Manager</button>
+          <button onclick="openPreviewModal()" class="sec-btn" style="background:#27ae60;">&#9993;&#xFE0F; Preview a Date</button>
+          <button onclick="switchView('custom_event')" class="sec-btn" style="background:#8e44ad;">&#9200; Custom Event</button>
         </div>
       </div>
 
@@ -170,13 +194,182 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 2. CUSTOM EVENT VIEW                       -->
+    <!-- 2. MODULE MANAGER VIEW                     -->
+    <!-- ========================================== -->
+    <div id="viewModuleManager" class="view-panel">
+      <!-- Hub View -->
+      <div class="card" id="hubView" style="display:block;">
+        <div class="header-row">
+          <h2>&#9874;&#65039; Module Manager</h2>
+          <span onclick="handleCloseHub()" class="close-x" title="Return to Dashboard">&times;</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <p style="font-size:13px; color:#aaa; margin:0;">Delivery Sequence (Leah First):</p>
+          <button type="button" class="action-btn" onclick="openNewModuleModal()" style="padding:6px 12px; font-size:12px;">+ New Module</button>
+        </div>
+
+        <div id="moduleListContainer">
+          <p style="font-size:13px; color:#888; text-align:center; padding:15px 0;">Loading modules...</p>
+        </div>
+
+        <div style="margin-top:14px; display:flex; gap:8px;">
+          <button type="button" class="action-btn" id="saveHubBtn" onclick="saveHubChanges()" style="flex:1;" disabled>Save Changes</button>
+        </div>
+        <div id="hubStatusBox"></div>
+      </div>
+
+      <!-- Module Editor View -->
+      <div class="card" id="editorView" style="display:none; margin-top:8px;">
+        <div class="header-row">
+          <h2 id="editorModuleHeader">&#9998;&#65039; Edit Module</h2>
+          <span onclick="closeEditorView()" class="close-x">&times;</span>
+        </div>
+
+        <div class="form-group" style="display:flex; gap:8px; align-items:flex-end;">
+          <div style="flex:2;">
+            <label>Module Title (Max 30 Chars)</label>
+            <input type="text" id="modNameInput" maxlength="30" />
+          </div>
+          <div style="flex:1;">
+            <button type="button" class="sec-action-btn" onclick="openEmailLayoutModal()" style="width:100%; padding:10px 8px; font-size:13px; background:#b9936c; color:#fff; border:none; font-weight:bold;">&#9993;&#65039; Email Layout</button>
+          </div>
+        </div>
+
+        <!-- Primaries (Left) & Slim Vertical Quota Stepper (Right) -->
+        <div style="display:flex; gap:8px; margin-bottom:12px; align-items:stretch;">
+          <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; gap:6px;">
+              <div style="flex:1.7; min-width:0;">
+                <label style="font-size:11px;">Primary 1 Email (Default)</label>
+                <input type="email" id="primary1EmailInput" placeholder="primary1@example.com" style="padding:8px; font-size:13px;" />
+              </div>
+              <div style="flex:1; min-width:0;">
+                <label style="font-size:11px;">Name (10 char)</label>
+                <input type="text" id="primary1NameInput" maxlength="10" placeholder="e.g. Skip" style="padding:8px; font-size:13px;" />
+              </div>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <div style="flex:1.7; min-width:0;">
+                <label style="font-size:11px;">Primary 2 Email (Optional)</label>
+                <input type="email" id="primary2EmailInput" placeholder="primary2@example.com" style="padding:8px; font-size:13px;" />
+              </div>
+              <div style="flex:1; min-width:0;">
+                <label style="font-size:11px;">Name (10 char)</label>
+                <input type="text" id="primary2NameInput" maxlength="10" placeholder="e.g. Donna" style="padding:8px; font-size:13px;" />
+              </div>
+            </div>
+          </div>
+
+          <div style="width:56px; flex:0 0 56px; display:flex; flex-direction:column;">
+            <label id="quotaLabel" style="font-size:11px; text-align:center; margin-bottom:4px; white-space:nowrap;">Quota</label>
+            <div class="stepper-v-container">
+              <button type="button" class="stepper-v-btn" onclick="stepQuota(5)">&plus;</button>
+              <div class="stepper-v-display">
+                <input type="number" id="modQuotaInput" class="stepper-input" onchange="validateQuotaInput()" style="text-align:center; border:none !important; background:transparent !important; color:#fff; font-size:15px; font-weight:bold; width:100%;" />
+              </div>
+              <button type="button" class="stepper-v-btn" onclick="stepQuota(-5)">&minus;</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Schedule & Occasions Button -->
+        <div class="form-group" style="background:#181818; padding:10px; border-radius:6px; border:1px solid #2a2a2a;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label style="margin:0;">Delivery Schedule (Weekdays)</label>
+            <button type="button" class="sec-action-btn" onclick="openOccasionManagerModal()" style="padding:4px 10px; font-size:12px; background:#b9936c; color:#fff; border:none; font-weight:bold;">&#10024; Occasion Manager</button>
+          </div>
+          <div class="days-row" id="daysContainer" style="margin-top:6px;">
+            <div class="day-box" onclick="toggleDay(0)" id="day_0">Sun</div>
+            <div class="day-box" onclick="toggleDay(1)" id="day_1">Mon</div>
+            <div class="day-box" onclick="toggleDay(2)" id="day_2">Tue</div>
+            <div class="day-box" onclick="toggleDay(3)" id="day_3">Wed</div>
+            <div class="day-box" onclick="toggleDay(4)" id="day_4">Thu</div>
+            <div class="day-box" onclick="toggleDay(5)" id="day_5">Fri</div>
+            <div class="day-box" onclick="toggleDay(6)" id="day_6">Sat</div>
+          </div>
+        </div>
+
+        <!-- Daily Images per Send (1-3) & Style Editor Button -->
+        <div class="form-group" style="background:#181818; padding:10px; border-radius:6px; border:1px solid #2a2a2a;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label style="margin:0;">Daily Images per Send (1-3)</label>
+            <button type="button" class="sec-action-btn" onclick="openStyleEditorModal()" style="padding:4px 10px; font-size:12px; background:#b9936c; color:#fff; border:none; font-weight:bold;">&#10024; Style Editor</button>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:6px;">
+            <div style="flex:1;">
+              <label style="font-size:11px;">Image 1 (Required)</label>
+              <select id="slot1Select"></select>
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:11px;">Image 2 (Optional)</label>
+              <select id="slot2Select"></select>
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:11px;">Image 3 (Optional)</label>
+              <select id="slot3Select"></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reference Images Row -->
+        <div style="display:flex; gap:8px; align-items:flex-end; margin-bottom:10px;">
+          <div style="flex:1.5;">
+            <label>Reference Image 1</label>
+            <select id="refPhoto1Select"></select>
+          </div>
+          <div style="flex:1;">
+            <button type="button" class="sec-action-btn" onclick="openUploadRefModal()" style="width:100%; height:38px; padding:0 8px; font-size:12px; background:#2a2a2a; color:#ddd; border:1px dashed #555; display:flex; align-items:center; justify-content:center; gap:4px; font-weight:bold;">
+              <span>&#128193; Upload Image</span>
+            </button>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; margin-bottom:12px;">
+          <div style="flex:1;">
+            <label style="font-size:11px;">Reference Image 2</label>
+            <select id="refPhoto2Select"></select>
+          </div>
+          <div style="flex:1;">
+            <label style="font-size:11px;">Reference Image 3</label>
+            <select id="refPhoto3Select"></select>
+          </div>
+        </div>
+
+        <!-- Seeds -->
+        <div style="display:flex; gap:8px; margin-bottom:12px;">
+          <div style="flex:1;">
+            <label>Seed Category 1</label>
+            <select id="seed1Select"></select>
+          </div>
+          <div style="flex:1;">
+            <label>Seed Category 2</label>
+            <select id="seed2Select"></select>
+          </div>
+        </div>
+
+        <!-- Base Prompt Launcher -->
+        <div class="form-group" style="margin-top:14px;">
+          <button type="button" class="sec-action-btn" onclick="openBasePromptModal()" style="width:100%; padding:11px 12px; font-size:13px; background:#b9936c; color:#fff; border:none; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px;">
+            <span>&#9998;&#65039; Base System Prompt</span>
+          </button>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:14px;">
+          <button type="button" class="action-btn" id="saveModuleBtn" onclick="commitModuleEdits()" style="flex:2;">Save Module Changes</button>
+          <button type="button" class="sec-action-btn" onclick="closeEditorView()" style="flex:1;">Cancel</button>
+        </div>
+        <div id="editorStatusBox"></div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. CUSTOM EVENT VIEW                       -->
     <!-- ========================================== -->
     <div id="viewCustomEvent" class="view-panel">
       <div class="form-card">
         <div class="header-row">
           <h2 style="font-size:19px; color:#8e44ad; margin:0; font-weight:700;">&#9200; Create 1-Off Custom Event</h2>
-          <span onclick="switchView('dashboard')" class="close-x" title="Return to Dashboard">&times;</span>
+          <span onclick="switchView('dashboard')" class="close-x">&times;</span>
         </div>
 
         <div class="form-group">
@@ -192,8 +385,8 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Occasion Title *</label>
-          <input type="text" id="ceOccasionTitle" placeholder="e.g. Moonie's Birthday!" />
+          <label>Occasion Title * (Max 30 chars)</label>
+          <input type="text" id="ceOccasionTitle" maxlength="30" placeholder="e.g. Moonie Birthday" />
         </div>
         <div class="form-group">
           <label>Custom Instructions / Narrative</label>
@@ -220,13 +413,13 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 3. ASSET MANAGER VIEW                      -->
+    <!-- 4. ASSET MANAGER VIEW                      -->
     <!-- ========================================== -->
     <div id="viewAssetManager" class="view-panel">
       <div class="form-card">
         <div class="header-row">
           <h2 style="font-size:19px; color:#d35400; margin:0; font-weight:700;">&#10024; Asset Manager</h2>
-          <span onclick="switchView('dashboard')" class="close-x" title="Return to Dashboard">&times;</span>
+          <span onclick="switchView('dashboard')" class="close-x">&times;</span>
         </div>
 
         <div class="form-group">
@@ -245,7 +438,8 @@
               <span id="amJpgSeg" class="switch-segment active">JPG</span>
               <span id="amGifSeg" class="switch-segment">GIF</span>
             </div>
-            <button class="overlay-prompt" onclick="openPromptEditor()">✒️ Edit Prompt</button>
+            <button id="amDeleteMediaBtn" class="trash-btn" onclick="handleAmDeleteClick()" title="Delete active format">&#128465;&#65039;</button>
+            <button class="overlay-prompt" onclick="openPromptEditor()">&#9998;&#65039; Edit Prompt</button>
           </div>
           <div id="amCaptionDisplay" class="caption-box" onclick="openCaptionEditor()" title="Tap to edit caption"></div>
         </div>
@@ -267,7 +461,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 4. AI-YORE ASSISTANT VIEW                  -->
+    <!-- 5. AI-YORE ASSISTANT VIEW                  -->
     <!-- ========================================== -->
     <div id="viewAiChat" class="view-panel">
       <div class="header-row">
@@ -275,7 +469,7 @@
           <h2 style="font-size:18px; color:#3498db; margin:0; font-weight:700;">&#10024; AI-yore Assistant</h2>
           <button onclick="clearChatHistory()" style="background:none; border:none; color:#777; text-decoration:underline; cursor:pointer; font-size:11px;">Reset Chat</button>
         </div>
-        <span onclick="switchView('dashboard')" class="close-x" title="Return to Dashboard">&times;</span>
+        <span onclick="switchView('dashboard')" class="close-x">&times;</span>
       </div>
 
       <div class="form-card" style="padding:10px;">
@@ -295,8 +489,236 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- PREVIEW MODAL                              -->
+    <!-- MODALS & POPUPS                            -->
     <!-- ========================================== -->
+
+    <!-- Email Layout Modal -->
+    <div id="emailLayoutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2200; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #b9936c; border-radius:12px; padding:20px; width:90%; max-width:460px; max-height:85vh; overflow-y:auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3 style="color:#b9936c; font-size:16px;">&#9993;&#65039; Email Presentation &amp; Layout</h3>
+          <span onclick="closeEmailLayoutModal()" class="close-x">&times;</span>
+        </div>
+
+        <div class="form-group" style="display:flex; align-items:center; justify-content:space-between; background:#222; padding:8px 12px; border-radius:6px; border:1px solid #333; margin-bottom:12px;">
+          <label style="margin:0; font-size:13px; color:#ddd;">Module Accent Colour</label>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="color" id="modTagColorInput" style="width:36px; height:32px; padding:0; border:none; background:transparent; cursor:pointer;" />
+            <span id="tagColorHexDisplay" style="font-size:12px; font-weight:bold; color:#bbb; font-family:monospace;">#4A7D45</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label style="font-size:12px;">Outbound Email Subject Line</label>
+          <input type="text" id="modSubjectInput" placeholder="e.g. Skip's Adventures: Just a Little Weekly Awesomeness" />
+        </div>
+
+        <div style="display:flex; gap:8px; margin-bottom:12px;">
+          <div style="flex:1;">
+            <label style="font-size:12px;">Email Header Title</label>
+            <input type="text" id="modHeaderInput" placeholder="e.g. Skip's Adventures" />
+          </div>
+          <div style="flex:1;">
+            <label style="font-size:12px;">Email Subtitle</label>
+            <input type="text" id="modSubtitleInput" placeholder="e.g. Your Wednesday Dose of the Good Life" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label id="primaryBottomLabel" style="font-size:12px;">Primary Recipient Footer Greeting</label>
+          <textarea id="modPrimaryBottomInput" style="height:65px; font-size:12px;"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label style="font-size:12px;">General Subscriber Footer Note</label>
+          <textarea id="modSubscriberBottomInput" style="height:65px; font-size:12px;"></textarea>
+        </div>
+
+        <div style="margin-top:14px; text-align:right;">
+          <button type="button" class="action-btn" onclick="closeEmailLayoutModal()" style="padding:8px 18px;">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Base Prompt Modal -->
+    <div id="basePromptModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2200; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #b9936c; border-radius:12px; padding:20px; width:90%; max-width:480px; max-height:85vh; display:flex; flex-direction:column;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h3 id="basePromptModalTitle" style="color:#b9936c; font-size:16px; margin:0;">&#9998;&#65039; Base System Prompt</h3>
+          <span onclick="closeBasePromptModal()" class="close-x">&times;</span>
+        </div>
+        <p style="font-size:12px; color:#888; margin-bottom:10px;">The master storytelling instructions guiding image prompt &amp; journal generation.</p>
+        <textarea id="basePromptTextarea" style="flex:1; min-height:220px; font-size:12px; line-height:1.4; resize:none; padding:10px; background:#181818; color:#fff; border:1px solid #333; border-radius:6px;"></textarea>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+          <button type="button" id="askAiPromptBtn" class="sec-action-btn" onclick="askAiYorePromptHelp()" style="background:#2980b9; color:#fff; border:none; padding:8px 12px; font-size:12px; font-weight:bold; display:flex; align-items:center; gap:6px;">
+            <span>&#128172; Ask AI-yore to Craft</span>
+          </button>
+          <button type="button" class="action-btn" onclick="closeBasePromptModal()" style="padding:8px 18px;">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Occasion Manager Modal -->
+    <div id="occasionsModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2200; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #b9936c; border-radius:12px; padding:20px; width:90%; max-width:480px; max-height:85vh; overflow-y:auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3 style="color:#b9936c; font-size:16px;">&#10024; Occasion Manager</h3>
+          <span onclick="closeOccasionsModal()" class="close-x">&times;</span>
+        </div>
+
+        <p style="font-size:12px; color:#aaa; margin-bottom:12px;">Active built-in annual occasions for this module (Tap an occasion to edit):</p>
+        <div id="occasionListContainer"></div>
+
+        <hr style="border:none; border-top:1px dashed #333; margin:14px 0;">
+        <p style="font-size:13px; font-weight:bold; color:#ddd; margin-bottom:8px;">+ Add or Edit Occasion</p>
+
+        <div class="form-group">
+          <select id="presetOccasionSelect" onchange="onPresetOccasionChange()" style="font-size:12px; border-color:#b9936c;">
+            <option value="">-- Or choose from standard &amp; floating holidays --</option>
+            <optgroup label="Canadian Floating Statutory Holidays">
+              <option value="floating:thanksgiving">Thanksgiving (2nd Mon in Oct)</option>
+              <option value="floating:victoria_day">Victoria Day (Mon before May 25)</option>
+              <option value="floating:family_day">Family Day (3rd Mon in Feb)</option>
+              <option value="floating:mothers_day">Mother's Day (2nd Sun in May)</option>
+              <option value="floating:fathers_day">Father's Day (3rd Sun in Jun)</option>
+              <option value="floating:civic_holiday">Civic Holiday (1st Mon in Aug)</option>
+              <option value="floating:labour_day">Labour Day (1st Mon in Sep)</option>
+              <option value="floating:drivers_week">Professional Drivers Week (1st Wed in Sep)</option>
+            </optgroup>
+            <optgroup label="Church Floating Holidays">
+              <option value="floating:pancake_day">Pancake Day / Shrove Tuesday</option>
+              <option value="floating:good_friday">Good Friday</option>
+              <option value="floating:easter_monday">Easter Monday</option>
+            </optgroup>
+            <optgroup label="Fixed Annual Holidays">
+              <option value="fixed:01-01">New Year's Day (Jan 1)</option>
+              <option value="fixed:02-14">Valentine's Day (Feb 14)</option>
+              <option value="fixed:03-17">St. Patrick's Day (Mar 17)</option>
+              <option value="fixed:07-01">Canada Day (Jul 1)</option>
+              <option value="fixed:10-31">Halloween (Oct 31)</option>
+              <option value="fixed:11-11">Remembrance Day (Nov 11)</option>
+              <option value="fixed:12-25">Christmas Day (Dec 25)</option>
+              <option value="fixed:12-26">Boxing Day (Dec 26)</option>
+            </optgroup>
+            <optgroup label="Astronomical Seasons">
+              <option value="fixed:03-20">Spring Equinox / Ostara (Mar 20)</option>
+              <option value="fixed:06-21">Summer Solstice / Litha (Jun 21)</option>
+              <option value="fixed:09-22">Autumn Equinox / Mabon (Sep 22)</option>
+              <option value="fixed:12-21">Winter Solstice / Yule (Dec 21)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-bottom:8px;">
+          <div style="flex:2;">
+            <input type="text" id="newOccTitle" maxlength="30" oninput="this.value = this.value.replace(/[.!?:;,]/g, '')" placeholder="Occasion Title (Max 30 chars)" />
+          </div>
+          <div style="flex:1; position:relative;">
+            <div onclick="triggerOccDatePicker()" style="position:relative; background:#1e1e1e; border:1px solid #333; border-radius:6px; padding:10px; display:flex; justify-content:space-between; align-items:center; height:38px; cursor:pointer;">
+              <span id="occDateDisplay" style="font-size:13px; font-weight:bold; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Select Date</span>
+              <input type="date" id="newOccDateInput" onchange="onOccDateInputChange()" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer; -webkit-appearance:none;" />
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px; background:#222; padding:8px 12px; border-radius:6px; border:1px solid #333;">
+          <input type="checkbox" id="newOccOneOffCheck" onchange="onOneOffCheckChange()" style="width:16px; height:16px; cursor:pointer;" />
+          <label for="newOccOneOffCheck" style="margin:0; font-size:12px; color:#ddd; cursor:pointer;">One-Off Event (Specific Year Only &mdash; Prioritised over Annuals)</label>
+        </div>
+
+        <div class="form-group">
+          <textarea id="newOccDesc" maxlength="300" style="height:65px; font-size:12px;" placeholder="Thematic instructions for Gemini prompt (up to 300 chars)..."></textarea>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button type="button" class="action-btn" id="addOccBtn" onclick="addNewOccasion()" style="flex:2; background:#b9936c; color:#fff; border:none; padding:9px; font-weight:bold;">Add Occasion</button>
+          <button type="button" class="sec-action-btn" id="cancelOccEditBtn" onclick="resetOccasionForm()" style="flex:1; display:none;">Cancel</button>
+        </div>
+
+        <div style="margin-top:14px; text-align:right;">
+          <button type="button" class="action-btn" onclick="closeOccasionsModal()" style="padding:8px 18px; background:#b9936c;">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Style Editor Modal -->
+    <div id="styleModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2200; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #b9936c; border-radius:12px; padding:20px; width:90%; max-width:440px; max-height:85vh; overflow-y:auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3 style="color:#b9936c; font-size:16px;">&#10024; Style Editor</h3>
+          <span onclick="closeStyleModal()" class="close-x">&times;</span>
+        </div>
+        <div id="styleListContainer"></div>
+        <hr style="border:none; border-top:1px dashed #333; margin:14px 0;">
+        <p style="font-size:13px; font-weight:bold; color:#ddd; margin-bottom:8px;">+ Add New Style</p>
+        <div class="form-group">
+          <label style="font-size:11px;">Style Code * (Max 6 chars, letters only)</label>
+          <input type="text" id="newStyleCode" maxlength="6" oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '')" placeholder="e.g. Sketch" />
+        </div>
+        <div class="form-group">
+          <label style="font-size:11px;">Style Prompt Instruction</label>
+          <textarea id="newStyleRule" style="height:60px;" placeholder="Describe visual medium and rendering..."></textarea>
+        </div>
+        <button type="button" class="sec-action-btn" onclick="addNewStyle()" style="width:100%; background:#27ae60; color:#fff; border:none; padding:8px;">Add Style</button>
+        <div style="margin-top:14px; text-align:right;">
+          <button type="button" class="action-btn" onclick="closeStyleModal()" style="padding:8px 18px;">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Reference Image Modal -->
+    <div id="uploadRefModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2300; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #b9936c; border-radius:12px; padding:20px; width:90%; max-width:400px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3 style="color:#b9936c; font-size:16px; margin:0;">&#128193; Upload Reference Image</h3>
+          <span onclick="closeUploadRefModal()" class="close-x">&times;</span>
+        </div>
+        <p style="font-size:12px; color:#888; margin-bottom:12px;">Select a photo from your phone or PC. It will be added to this module's reference images.</p>
+        <input type="file" id="refImageFileInput" accept="image/jpeg,image/png,image/jpg" onchange="onRefFileSelected()" style="margin-bottom:10px; font-size:12px; width:100%;" />
+        <div class="form-group">
+          <label style="font-size:11px;">Filename to Save as in Drive:</label>
+          <input type="text" id="refFileNameInput" placeholder="e.g. reference_boat.jpg" />
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+          <button type="button" class="action-btn" id="uploadRefSubmitBtn" onclick="submitRefImageUpload()" disabled style="padding:8px 16px;">Upload</button>
+          <button type="button" class="sec-action-btn" onclick="closeUploadRefModal()">Cancel</button>
+        </div>
+        <p id="uploadRefStatus" style="font-size:12px; margin-top:8px; display:none;"></p>
+      </div>
+    </div>
+
+    <!-- Factory Modal (New Module) -->
+    <div id="factoryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2100; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #b9936c; border-radius:12px; padding:20px; width:90%; max-width:440px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3 style="color:#b9936c; font-size:16px;">+ Create New Module</h3>
+          <span onclick="closeFactoryModal()" class="close-x">&times;</span>
+        </div>
+        <div class="form-group">
+          <label>Module ID * (Max 8 chars lowercase)</label>
+          <input type="text" id="newModId" maxlength="8" oninput="this.value = this.value.toLowerCase().replace(/[^a-z0-9_]/g, '')" placeholder="e.g. bob" />
+        </div>
+        <div class="form-group">
+          <label>Full Module Name * (Max 30 chars)</label>
+          <input type="text" id="newModName" maxlength="30" placeholder="e.g. Bob &amp; Doug's Adventures" />
+        </div>
+        <div class="form-group">
+          <label>Primary Recipient Email *</label>
+          <input type="email" id="newModEmail" placeholder="bob@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Character &amp; Setting Description</label>
+          <textarea id="newModDescription" style="height:80px;" placeholder="Brief description of characters and setting..."></textarea>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+          <button type="button" class="action-btn" id="createFactoryBtn" onclick="submitCreateModule()">Create Module</button>
+          <button type="button" class="sec-action-btn" onclick="closeFactoryModal()">Cancel</button>
+        </div>
+        <p id="factoryStatus" style="font-size:12px; margin-top:10px; display:none;"></p>
+      </div>
+    </div>
+
+    <!-- Preview Modal -->
     <div id="previewModal" onclick="if(event.target===this) closePreviewModal()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; justify-content:center; align-items:center;">
       <div style="background:#1a1a1a; border:1px solid #2e2e2e; border-radius:12px; padding:20px; width:90%; max-width:400px; text-align:center; position:relative;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -324,13 +746,11 @@
       </div>
     </div>
 
-    <!-- GIF EXISTENCE WARNING MODAL -->
+    <!-- GIF Existence Warning Modal -->
     <div id="amGifWarningModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2600; justify-content:center; align-items:center;">
-      <div style="background:#1a1a1a; border:1px solid #d35400; border-radius:12px; padding:22px; width:90%; max-width:380px; text-align:center; box-shadow:0 8px 24px rgba(0,0,0,0.6);">
-        <h3 style="color:#d35400; font-size:18px; margin-bottom:10px;">⚠️ Animated GIF Exists</h3>
-        <p style="font-size:14px; color:#bbb; line-height:1.5; margin-bottom:18px;">
-          An Animated GIF already exists for this artwork.
-        </p>
+      <div style="background:#1a1a1a; border:1px solid #d35400; border-radius:12px; padding:22px; width:90%; max-width:380px; text-align:center;">
+        <h3 style="color:#d35400; font-size:18px; margin-bottom:10px;">&#9888;&#65039; Animated GIF Exists</h3>
+        <p style="font-size:14px; color:#bbb; line-height:1.5; margin-bottom:18px;">An Animated GIF already exists for this artwork.</p>
         <div style="display:flex; gap:10px; justify-content:center;">
           <button onclick="resolveAmGifWarning(true)" class="primary-btn" style="background:#d35400; width:auto; padding:10px 24px; font-size:14px;">OK</button>
           <button onclick="resolveAmGifWarning(false)" class="sec-btn" style="background:#333; padding:10px 18px; font-size:14px;">Cancel</button>
@@ -338,11 +758,11 @@
       </div>
     </div>
 
-    <!-- PROMPT MODAL -->
+    <!-- Prompt Modal -->
     <div id="amPromptModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center;">
       <div style="background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:20px; width:90%; max-width:440px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <h3 style="color:#2980b9; font-size:16px;">✒️ Edit Asset Prompt</h3>
+          <h3 style="color:#2980b9; font-size:16px;">&#9998;&#65039; Edit Asset Prompt</h3>
           <span onclick="closePromptModal()" class="close-x">&times;</span>
         </div>
         <textarea id="amPromptInput" style="width:100%; height:140px; background:#1e1e1e; color:#fff; border:1px solid #333; border-radius:6px; padding:10px; font-size:13px;"></textarea>
@@ -353,11 +773,11 @@
       </div>
     </div>
 
-    <!-- CAPTION MODAL -->
+    <!-- Caption Modal -->
     <div id="amCaptionModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center;">
       <div style="background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:20px; width:90%; max-width:440px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <h3 style="color:#d35400; font-size:16px;">✒️ Edit Journal Caption</h3>
+          <h3 style="color:#d35400; font-size:16px;">&#9998;&#65039; Edit Journal Caption</h3>
           <span onclick="closeCaptionModal()" class="close-x">&times;</span>
         </div>
         <p style="font-size:12px; color:#888; margin-bottom:10px;">Adjust the adventure text stored for this asset.</p>
@@ -369,7 +789,7 @@
       </div>
     </div>
 
-    <!-- CUSTOM CONFIRM / ALERT MODAL -->
+    <!-- Confirm / Alert Dialog -->
     <div id="dialogModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2500; justify-content:center; align-items:center;">
       <div style="background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:22px; width:90%; max-width:380px; text-align:center;">
         <h3 id="dialogTitle" style="color:#fff; font-size:18px; margin-bottom:10px;"></h3>
@@ -378,7 +798,7 @@
       </div>
     </div>
 
-    <!-- ACCESS RESTRICTED UNLOCK VIEW -->
+    <!-- Unlock PIN Modal -->
     <div id="viewUnlock" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#121212; z-index:5000; justify-content:center; align-items:center; padding:20px;">
       <div class="form-card" style="max-width:360px; width:100%; text-align:center; padding:26px;">
         <h2 style="color:#e74c3c; font-size:20px; margin-bottom:8px;">&#128274; Access Restricted</h2>
@@ -391,7 +811,6 @@
   </div>
 
   <script>
-    // Live Apps Script Engine URL
     const ENGINE_URL = "https://script.google.com/macros/s/AKfycbwsjz_Cpn3vXepVtjDq9RmFktEd39q3Oage7TvwTaHAgravxLIrlkwk-hAAmm-_1OPy/exec";
     const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
@@ -401,9 +820,45 @@
     let amAssetList = [];
     let amActiveDetails = null;
     let amShowingGif = false;
-    let amActiveWarningBox = null;
 
-    // --- INITIALISATION & ZERO-KNOWLEDGE AUTH ---
+    // Module Manager Controller State
+    let currentOrder = [];
+    let originalHubState = "[]";
+    let activeEditorConfig = null;
+    let availableRefImages = [];
+    let availableSeeds = [];
+    let editingOccasionIndex = -1;
+    let activeOccasionFloatingKey = null;
+    let activeOccasionDateString = "";
+    let activeOccasionYear = null;
+    let selectedRefFileBase64 = null;
+
+    const OCCASION_PRESETS = {
+      "floating:thanksgiving": { title: "Thanksgiving", desc: "Harvest abundance, gratitude, and a hearty autumn feast together." },
+      "floating:victoria_day": { title: "Victoria Day", desc: "Opening of warm weather season, relaxing outdoors, and fireworks." },
+      "floating:family_day": { title: "Family Day", desc: "Warmth, togetherness, board games, and cozy indoor fun." },
+      "floating:mothers_day": { title: "Mother's Day", desc: "Love, radiant flowers, appreciation, and gentle pampering." },
+      "floating:fathers_day": { title: "Father's Day", desc: "Hearty outdoor cookout, laughter, and celebrating guidance and wisdom." },
+      "floating:civic_holiday": { title: "Civic Holiday", desc: "Peak summer long weekend sunshine, cool drinks, and relaxed leisure." },
+      "floating:labour_day": { title: "Labour Day", desc: "Late summer golden sunshine, lakeside stillness, and well-earned rest." },
+      "floating:drivers_week": { title: "Drivers Week", desc: "Highway memories, open roads, and honouring miles traveled." },
+      "floating:pancake_day": { title: "Pancake Day", desc: "Grand towers of golden fluffy pancakes, maple syrup, and morning joy." },
+      "floating:good_friday": { title: "Good Friday", desc: "Sacred silence, soft candlelight, gentle peace, and reverent reflection." },
+      "floating:easter_monday": { title: "Easter Monday", desc: "Spring renewal, radiant morning light, and joyful peace." },
+      "fixed:01-01": { title: "New Year's Day", desc: "Fresh beginnings, quiet peace, and bright new horizons." },
+      "fixed:02-14": { title: "Valentine's Day", desc: "Sweet romance, red roses, chocolate treats, and deep affection." },
+      "fixed:03-17": { title: "St Patrick's Day", desc: "Playful good luck, shamrocks, festive green, and whimsical magic." },
+      "fixed:07-01": { title: "Canada Day", desc: "Red and white flags, maple leaves, proud celebration, and patriotic cheer." },
+      "fixed:10-31": { title: "Halloween", desc: "Whimsical costumes, carved glowing pumpkins, and fun autumn mischief." },
+      "fixed:11-11": { title: "Remembrance Day", desc: "Solemn respect, bright red poppies, gentle stillness, and quiet honour." },
+      "fixed:12-25": { title: "Christmas Day", desc: "Festive holiday warmth, twinkling lights, and cozy winter wonder." },
+      "fixed:12-26": { title: "Boxing Day", desc: "Lazy holiday comfort, warm sweaters, leftover treats, and relaxing." },
+      "fixed:03-20": { title: "Spring Equinox", desc: "Awakening earth, tender green shoots, birdsong, and fresh vitality." },
+      "fixed:06-21": { title: "Summer Solstice", desc: "Longest sunlit day, blooming wildflower meadows, and golden warmth." },
+      "fixed:09-22": { title: "Autumn Equinox", desc: "Crisp golden leaves, balanced twilight, and rich harvest colours." },
+      "fixed:12-21": { title: "Winter Solstice", desc: "Deep peaceful midwinter stillness, evergreen boughs, and hearth fire glow." }
+    };
+
     function init() {
       const urlParams = new URLSearchParams(window.location.search);
       const urlKey = urlParams.get('key');
@@ -436,7 +891,6 @@
       }
     }
 
-    // --- API CLIENT WRAPPERS ---
     async function apiGet(action, params = {}) {
       const q = new URLSearchParams({ api: "1", key: accessKey, action: action, ...params });
       const res = await fetch(`${ENGINE_URL}?${q.toString()}`);
@@ -453,12 +907,14 @@
       return await res.json();
     }
 
-    // --- VIEW SWITCHING ---
     async function switchView(viewName) {
       document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('view-active'));
       if (viewName === 'dashboard') {
         document.getElementById('viewDashboard').classList.add('view-active');
         refreshDashboard();
+      } else if (viewName === 'module_manager') {
+        document.getElementById('viewModuleManager').classList.add('view-active');
+        initModuleManager();
       } else if (viewName === 'custom_event') {
         document.getElementById('viewCustomEvent').classList.add('view-active');
         if (!dashboardData) await refreshDashboard();
@@ -473,7 +929,6 @@
       }
     }
 
-    // --- DIALOG MODALS ---
     function showAlert(title, message) {
       document.getElementById('dialogTitle').textContent = title || "Notice";
       document.getElementById('dialogMessage').textContent = message || "";
@@ -482,7 +937,7 @@
       document.getElementById('dialogModal').style.display = 'flex';
     }
 
-    function showConfirm(title, message, onConfirm, btnColor = "#27ae60") {
+    function showConfirm(title, message, onConfirm, btnColor = "#b9936c") {
       document.getElementById('dialogTitle').textContent = title || "Confirm Action";
       document.getElementById('dialogMessage').textContent = message || "";
       document.getElementById('dialogButtons').innerHTML = 
@@ -495,7 +950,7 @@
 
     function closeDialog() { document.getElementById('dialogModal').style.display = 'none'; }
 
-    // --- DASHBOARD CONTROLLER ---
+    // --- DASHBOARD ---
     async function refreshDashboard() {
       try {
         const data = await apiGet('get_dashboard');
@@ -511,7 +966,6 @@
         }
 
         document.getElementById('dashTriggerCard').style.display = data.hasClerk ? 'none' : 'flex';
-
         document.getElementById('dashSubscribers').innerHTML = 
           `${data.activeSubscribers}<br><span style="font-size:12px; font-weight:normal; color:#888;">(${data.totalDailyDeliveries} / ${data.maxDailyDeliveries} Deliveries)</span>`;
 
@@ -529,7 +983,6 @@
           holidayHtml = data.holidayLines.map(h => `<br><span style="font-size:13px; font-weight:600; color:#ddd; white-space:nowrap;">${h}</span>`).join("");
         }
         document.getElementById('dashStockpile').innerHTML = `${data.stockpileDays}${holidayHtml}`;
-
         document.getElementById('dashPromptFail').innerHTML = data.promptFailRate;
 
         const checkinCard = document.getElementById('dashCheckinCard');
@@ -546,9 +999,8 @@
         mInput.min = data.minDateStr;
         mInput.value = data.minDateStr;
         updateModalDateDisplay();
-
       } catch(err) {
-        showAlert("Connection Error", "Could not reach Apps Script Engine: " + err.message);
+        showAlert("Connection Error", err.message);
       }
     }
 
@@ -565,10 +1017,9 @@
         const res = await apiPost('fix_triggers');
         showAlert("Triggers Restored", res.msg);
         refreshDashboard();
-      });
+      }, "#27ae60");
     }
 
-    // --- PREVIEW MODAL CONTROLLER ---
     function openPreviewModal() {
       document.getElementById('previewModal').style.display = 'flex';
       document.getElementById('modalStatus').style.display = 'none';
@@ -594,7 +1045,7 @@
       btn.disabled = true;
       status.style.display = 'block';
       status.style.color = '#ccc';
-      status.textContent = '⚒️ Generating preview report...';
+      status.textContent = 'Generating preview report...';
 
       const res = await apiPost('preview_date', { dateStr: dVal, includeFarewell: fCheck });
       btn.disabled = false;
@@ -602,12 +1053,979 @@
       status.textContent = res.msg;
     }
 
-    // --- CUSTOM EVENT CONTROLLER ---
+    // --- MODULE MANAGER CONTROLLER ---
+    function initModuleManager() {
+      document.getElementById('editorView').style.display = 'none';
+      document.getElementById('hubView').style.display = 'block';
+      loadHub();
+    }
+
+    function isHubDirty() {
+      return JSON.stringify(currentOrder) !== originalHubState;
+    }
+
+    function checkHubDirty() {
+      const btn = document.getElementById("saveHubBtn");
+      if (!btn) return;
+      const dirty = isHubDirty();
+      btn.disabled = !dirty;
+      btn.textContent = dirty ? "Save Changes (Unsaved Changes)" : "Save Changes";
+      btn.style.background = dirty ? "#27ae60" : "#b9936c";
+    }
+
+    function handleCloseHub() {
+      if (isHubDirty()) {
+        showConfirm("Unsaved Hub Changes", "You have unsaved changes to module sequence or status. Discard changes and return to Dashboard?", () => {
+          switchView('dashboard');
+        });
+      } else {
+        switchView('dashboard');
+      }
+    }
+
+    function handleOpenEditor(modId) {
+      if (isHubDirty()) {
+        showConfirm("Unsaved Hub Changes", "You have unsaved changes to module sequence or status. Discard changes and edit this module?", () => {
+          openModuleEditor(modId);
+        });
+      } else {
+        openModuleEditor(modId);
+      }
+    }
+
+    async function loadHub() {
+      const container = document.getElementById("moduleListContainer");
+      if (container) container.innerHTML = '<p style="font-size:13px; color:#888; text-align:center; padding:15px 0;">Loading modules...</p>';
+
+      try {
+        const data = await apiGet('get_module_hub');
+        if (data && data.success) {
+          currentOrder = (data.modules || []).map(m => ({ id: m.id, name: m.name, isPaused: Boolean(m.isPaused) }));
+          originalHubState = JSON.stringify(currentOrder);
+          renderHubList();
+          checkHubDirty();
+        } else {
+          container.innerHTML = '<p style="color:#e74c3c; text-align:center;">Failed to load modules from system.</p>';
+        }
+      } catch(err) {
+        container.innerHTML = '<p style="color:#e74c3c; text-align:center;">Error: ' + err.message + '</p>';
+      }
+    }
+
+    function renderHubList() {
+      const container = document.getElementById("moduleListContainer");
+      if (!container) return;
+      container.innerHTML = "";
+
+      if (!currentOrder || currentOrder.length === 0) {
+        container.innerHTML = '<p style="font-size:13px; color:#888; text-align:center; padding:15px 0;">No active modules discovered.</p>';
+        return;
+      }
+
+      currentOrder.forEach((mod, idx) => {
+        if (!mod) return;
+        const modId = (mod.id || "").toString().trim();
+        const modName = (mod.name || modId || "Module").toString();
+        const isLeah = (modId.toLowerCase() === "leah");
+        const upDisabled = (idx <= 1 || isLeah);
+        const downDisabled = (idx === 0 || idx === currentOrder.length - 1);
+
+        const row = document.createElement("div");
+        row.className = "mod-item";
+
+        const leftDiv = document.createElement("div");
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "mod-title";
+        titleSpan.textContent = modName;
+        titleSpan.onclick = () => { handleOpenEditor(modId); };
+
+        const idSpan = document.createElement("span");
+        idSpan.style.fontSize = "11px";
+        idSpan.style.color = "#777";
+        idSpan.style.marginLeft = "6px";
+        idSpan.textContent = "(" + modId + ")";
+
+        leftDiv.appendChild(titleSpan);
+        leftDiv.appendChild(idSpan);
+
+        const rightDiv = document.createElement("div");
+        rightDiv.style.display = "flex";
+        rightDiv.style.alignItems = "center";
+        rightDiv.style.gap = "6px";
+
+        const pill = document.createElement("span");
+        pill.className = "status-pill " + ((isLeah || !mod.isPaused) ? "status-active" : "status-paused");
+        pill.textContent = (isLeah || !mod.isPaused) ? "Active" : "Paused";
+        if (!isLeah) {
+          pill.style.cursor = "pointer";
+          pill.onclick = () => { toggleLocalPause(modId); };
+        }
+
+        const upBtn = document.createElement("button");
+        upBtn.type = "button";
+        upBtn.className = "arrow-btn";
+        upBtn.innerHTML = "&#9650;";
+        upBtn.disabled = upDisabled;
+        upBtn.onclick = () => { moveModule(idx, -1); };
+
+        const downBtn = document.createElement("button");
+        downBtn.type = "button";
+        downBtn.className = "arrow-btn";
+        downBtn.innerHTML = "&#9660;";
+        downBtn.disabled = downDisabled;
+        downBtn.onclick = () => { moveModule(idx, 1); };
+
+        rightDiv.appendChild(pill);
+        rightDiv.appendChild(upBtn);
+        rightDiv.appendChild(downBtn);
+
+        row.appendChild(leftDiv);
+        row.appendChild(rightDiv);
+        container.appendChild(row);
+      });
+    }
+
+    function toggleLocalPause(modId) {
+      const found = currentOrder.find(m => m.id === modId);
+      if (found) {
+        found.isPaused = !found.isPaused;
+        renderHubList();
+        checkHubDirty();
+      }
+    }
+
+    function moveModule(index, direction) {
+      if (index === 0) return;
+      const newIndex = index + direction;
+      if (newIndex < 1 || newIndex >= currentOrder.length) return;
+      const temp = currentOrder[index];
+      currentOrder[index] = currentOrder[newIndex];
+      currentOrder[newIndex] = temp;
+      renderHubList();
+      checkHubDirty();
+    }
+
+    async function saveHubChanges() {
+      const btn = document.getElementById("saveHubBtn");
+      const box = document.getElementById("hubStatusBox");
+      btn.disabled = true;
+      box.style.display = "block";
+      box.className = "";
+      box.style.color = "#ccc";
+      box.textContent = "Committing module sequence and status...";
+
+      try {
+        const res = await apiPost('save_module_hub', { hubPayload: currentOrder });
+        btn.disabled = false;
+        if (res.success) {
+          originalHubState = JSON.stringify(currentOrder);
+          checkHubDirty();
+          box.className = "success";
+          box.textContent = res.msg;
+          setTimeout(() => { box.style.display = "none"; }, 3000);
+        } else {
+          box.className = "error";
+          box.textContent = res.msg;
+        }
+      } catch(err) {
+        btn.disabled = false;
+        box.className = "error";
+        box.textContent = "Error: " + err.message;
+      }
+    }
+
+    async function openModuleEditor(modId) {
+      document.getElementById("hubView").style.display = "none";
+      document.getElementById("editorView").style.display = "block";
+      document.getElementById("editorModuleHeader").textContent = "Loading " + modId + "...";
+
+      try {
+        const res = await apiGet('get_module_config', { moduleId: modId });
+        if (res.success) {
+          activeEditorConfig = res.config;
+          availableRefImages = res.availableRefImages || [];
+          availableSeeds = res.availableSeedCategories || [];
+          populateEditorForm();
+        } else {
+          showAlert("Error", res.msg);
+          closeEditorView();
+        }
+      } catch(err) {
+        showAlert("Error", err.message);
+        closeEditorView();
+      }
+    }
+
+    function closeEditorView() {
+      document.getElementById("editorView").style.display = "none";
+      document.getElementById("hubView").style.display = "block";
+      activeEditorConfig = null;
+    }
+
+    function openEmailLayoutModal() { document.getElementById("emailLayoutModal").style.display = "flex"; }
+    function closeEmailLayoutModal() { document.getElementById("emailLayoutModal").style.display = "none"; }
+    function openBasePromptModal() { document.getElementById("basePromptModal").style.display = "flex"; }
+    function closeBasePromptModal() { document.getElementById("basePromptModal").style.display = "none"; }
+
+    function populateEditorForm() {
+      const cfg = activeEditorConfig;
+      const isLeah = (cfg.id.toLowerCase() === "leah");
+
+      document.getElementById("editorModuleHeader").textContent = "Edit " + cfg.name;
+      document.getElementById("modNameInput").value = cfg.name || "";
+
+      const defaultColor = isLeah ? "#4A7D45" : "#2c3e50";
+      const activeColor = cfg.tagColor || defaultColor;
+      document.getElementById("modTagColorInput").value = activeColor;
+      document.getElementById("tagColorHexDisplay").textContent = activeColor.toUpperCase();
+
+      const quotaInput = document.getElementById("modQuotaInput");
+      quotaInput.value = cfg.targetQuota || (isLeah ? 70 : 20);
+      document.getElementById("quotaLabel").textContent = "Quota";
+
+      const p1 = (cfg.primaries && cfg.primaries[0]) || {};
+      const p2 = (cfg.primaries && cfg.primaries[1]) || {};
+
+      const p1EmailInput = document.getElementById("primary1EmailInput");
+      const p1NameInput = document.getElementById("primary1NameInput");
+
+      p1EmailInput.value = p1.email || "";
+      p1NameInput.value = p1.name || "";
+
+      if (isLeah) {
+        p1EmailInput.readOnly = true;
+        p1EmailInput.style.opacity = "0.7";
+        p1NameInput.value = "Leah";
+        p1NameInput.readOnly = true;
+        p1NameInput.style.opacity = "0.7";
+      } else {
+        p1EmailInput.readOnly = false;
+        p1EmailInput.style.opacity = "1.0";
+        p1NameInput.readOnly = false;
+        p1NameInput.style.opacity = "1.0";
+      }
+
+      document.getElementById("primary2EmailInput").value = p2.email || "";
+      document.getElementById("primary2NameInput").value = p2.name || "";
+
+      document.getElementById("modSubjectInput").value = cfg.emailSubject || "";
+      document.getElementById("modHeaderInput").value = cfg.emailHeader || cfg.name || "";
+      document.getElementById("modSubtitleInput").value = cfg.emailSubtitle || "";
+
+      const priBottom = document.getElementById("modPrimaryBottomInput");
+      const defaultPrimaryNote = isLeah 
+        ? "You are forever my heart & soul.\nThe most amazing person who ever touched my life." 
+        : "Here’s to another week of adventure and morning magic.";
+      priBottom.value = cfg.primaryBottomNote || defaultPrimaryNote;
+      priBottom.readOnly = isLeah;
+      priBottom.style.opacity = isLeah ? "0.6" : "1.0";
+
+      const priLabel = document.getElementById("primaryBottomLabel");
+      if (isLeah) {
+        priLabel.innerHTML = 'Primary Recipient Greeting <span style="font-size:11px; color:#e74c3c;">&#128274; (Sacred Note &mdash; Locked)</span>';
+      } else {
+        priLabel.textContent = "Primary Recipient Footer Greeting";
+      }
+
+      document.getElementById("modSubscriberBottomInput").value = cfg.subscriberFooterNote || "These weekly adventures are created and delivered automatically.";
+
+      const days = cfg.scheduleDays || [];
+      for (let d = 0; d < 7; d++) {
+        const el = document.getElementById("day_" + d);
+        el.className = (days.indexOf(d) !== -1) ? "day-box selected" : "day-box";
+      }
+
+      refreshSlotSelects();
+      populateRefSelect("refPhoto1Select", (cfg.refPhotos && cfg.refPhotos[0]) || "");
+      populateRefSelect("refPhoto2Select", (cfg.refPhotos && cfg.refPhotos[1]) || "");
+      populateRefSelect("refPhoto3Select", (cfg.refPhotos && cfg.refPhotos[2]) || "");
+      populateSeedSelect("seed1Select", (cfg.seedConfigs && cfg.seedConfigs[0]) || "");
+      populateSeedSelect("seed2Select", (cfg.seedConfigs && cfg.seedConfigs[1]) || "");
+
+      const promptArea = document.getElementById("basePromptTextarea");
+      promptArea.value = cfg.basePrompt || "";
+      promptArea.readOnly = isLeah;
+      promptArea.style.opacity = isLeah ? "0.6" : "1.0";
+
+      const aiBtn = document.getElementById("askAiPromptBtn");
+      if (aiBtn) aiBtn.style.display = isLeah ? "none" : "flex";
+
+      const pModalTitle = document.getElementById("basePromptModalTitle");
+      pModalTitle.innerHTML = isLeah 
+        ? 'Base System Prompt <span style="font-size:11px; color:#e74c3c;">&#128274; (Sacred &mdash; Locked)</span>'
+        : 'Base System Prompt';
+    }
+
+    function stepQuota(delta) {
+      const input = document.getElementById("modQuotaInput");
+      const isLeah = activeEditorConfig && (activeEditorConfig.id.toLowerCase() === "leah");
+      const minVal = 5;
+      const maxVal = isLeah ? 90 : 50;
+      const curVal = parseInt(input.value, 10) || minVal;
+      input.value = Math.min(maxVal, Math.max(minVal, curVal + delta));
+    }
+
+    function validateQuotaInput() {
+      const input = document.getElementById("modQuotaInput");
+      const isLeah = activeEditorConfig && (activeEditorConfig.id.toLowerCase() === "leah");
+      const minVal = 5;
+      const maxVal = isLeah ? 90 : 50;
+      let val = parseInt(input.value, 10);
+      if (isNaN(val) || val < minVal) input.value = minVal;
+      else if (val > maxVal) input.value = maxVal;
+    }
+
+    function toggleDay(d) {
+      const cfg = activeEditorConfig;
+      if (!cfg) return;
+      const idx = cfg.scheduleDays.indexOf(d);
+      if (idx !== -1) {
+        if (cfg.scheduleDays.length === 1) {
+          showAlert("Schedule Notice", "A module must have at least one scheduled delivery day.");
+          return;
+        }
+        cfg.scheduleDays.splice(idx, 1);
+      } else {
+        cfg.scheduleDays.push(d);
+      }
+      document.getElementById("day_" + d).className = (idx === -1) ? "day-box selected" : "day-box";
+    }
+
+    function refreshSlotSelects() {
+      const cfg = activeEditorConfig;
+      const styles = cfg.styles || [];
+      const slots = cfg.dailySlots || ["Art", "None", "None"];
+
+      const buildOptions = (currentVal, isRequired) => {
+        let html = isRequired ? "" : '<option value="None">None</option>';
+        styles.forEach(st => {
+          const sel = (st.name === currentVal) ? "selected" : "";
+          html += `<option value="${st.name}" ${sel}>${st.name}</option>`;
+        });
+        return html;
+      };
+
+      document.getElementById("slot1Select").innerHTML = buildOptions(slots[0] || (styles[0] && styles[0].name) || "Art", true);
+      document.getElementById("slot2Select").innerHTML = buildOptions(slots[1] || "None", false);
+      document.getElementById("slot3Select").innerHTML = buildOptions(slots[2] || "None", false);
+    }
+
+    function populateRefSelect(elId, selectedVal) {
+      const el = document.getElementById(elId);
+      el.innerHTML = '<option value="">-- None --</option>';
+      availableRefImages.forEach(img => {
+        const sel = (img.filename === selectedVal) ? "selected" : "";
+        el.innerHTML += `<option value="${img.filename}" ${sel}>${img.filename} [${img.module}]</option>`;
+      });
+    }
+
+    function populateSeedSelect(elId, selectedVal) {
+      const el = document.getElementById(elId);
+      el.innerHTML = '<option value="">-- None --</option>';
+      availableSeeds.forEach(s => {
+        const sel = (s.key === selectedVal) ? "selected" : "";
+        el.innerHTML += `<option value="${s.key}" ${sel}>${s.label}</option>`;
+      });
+    }
+
+    // --- STYLE EDITOR ---
+    function openStyleEditorModal() {
+      renderStyleList();
+      document.getElementById("styleModal").style.display = "flex";
+    }
+    function closeStyleModal() {
+      document.getElementById("styleModal").style.display = "none";
+      refreshSlotSelects();
+    }
+
+    function renderStyleList() {
+      const container = document.getElementById("styleListContainer");
+      container.innerHTML = "";
+      const cfg = activeEditorConfig;
+
+      cfg.styles.forEach((st, idx) => {
+        const div = document.createElement("div");
+        div.style.background = "#222";
+        div.style.border = "1px solid #333";
+        div.style.borderRadius = "6px";
+        div.style.padding = "10px";
+        div.style.marginBottom = "8px";
+
+        const topRow = document.createElement("div");
+        topRow.style.display = "flex";
+        topRow.style.justifyContent = "space-between";
+        topRow.style.alignItems = "center";
+        topRow.style.marginBottom = "6px";
+
+        const labelSpan = document.createElement("span");
+        labelSpan.style.fontWeight = "bold";
+        labelSpan.style.color = "#b9936c";
+        labelSpan.innerHTML = st.name + ' <span style="font-size:11px; color:#888;">(Immutable)</span>';
+
+        const delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.style.background = "#c0392b";
+        delBtn.style.color = "#fff";
+        delBtn.style.border = "none";
+        delBtn.style.padding = "3px 8px";
+        delBtn.style.borderRadius = "4px";
+        delBtn.style.fontSize = "11px";
+        delBtn.style.cursor = "pointer";
+        delBtn.textContent = "Delete";
+        delBtn.onclick = () => removeStyle(idx);
+
+        topRow.appendChild(labelSpan);
+        topRow.appendChild(delBtn);
+
+        const ruleArea = document.createElement("textarea");
+        ruleArea.style.height = "60px";
+        ruleArea.style.fontSize = "12px";
+        ruleArea.value = st.rule || "";
+        ruleArea.onchange = function() { activeEditorConfig.styles[idx].rule = this.value; };
+
+        div.appendChild(topRow);
+        div.appendChild(ruleArea);
+        container.appendChild(div);
+      });
+    }
+
+    function addNewStyle() {
+      const code = document.getElementById("newStyleCode").value.trim().replace(/[^a-zA-Z0-9]/g, '').substring(0, 6);
+      const rule = document.getElementById("newStyleRule").value.trim();
+      if (!code) {
+        showAlert("Notice", "Please provide a valid style code (letters/numbers only, max 6 chars).");
+        return;
+      }
+      if (activeEditorConfig.styles.some(s => s.name.toLowerCase() === code.toLowerCase())) {
+        showAlert("Notice", "A style with code '" + code + "' already exists.");
+        return;
+      }
+      activeEditorConfig.styles.push({ name: code, rule: rule });
+      document.getElementById("newStyleCode").value = "";
+      document.getElementById("newStyleRule").value = "";
+      renderStyleList();
+    }
+
+    function removeStyle(idx) {
+      const targetStyle = activeEditorConfig.styles[idx].name;
+      const isAssigned = (document.getElementById("slot1Select").value === targetStyle ||
+                          document.getElementById("slot2Select").value === targetStyle ||
+                          document.getElementById("slot3Select").value === targetStyle);
+
+      if (isAssigned) {
+        showAlert("Cannot Delete Style", "Style '" + targetStyle + "' is assigned to a daily slot. Change the slot first.");
+        return;
+      }
+      if (activeEditorConfig.styles.length === 1) {
+        showAlert("Cannot Delete", "A module must have at least one defined style.");
+        return;
+      }
+      activeEditorConfig.styles.splice(idx, 1);
+      renderStyleList();
+    }
+
+    // --- OCCASION MANAGER ---
+    function openOccasionManagerModal() {
+      resetOccasionForm();
+      renderOccasionsList();
+      document.getElementById("occasionsModal").style.display = "flex";
+    }
+    function closeOccasionsModal() { document.getElementById("occasionsModal").style.display = "none"; }
+
+    function resetOccasionForm() {
+      editingOccasionIndex = -1;
+      activeOccasionFloatingKey = null;
+      activeOccasionDateString = "";
+      activeOccasionYear = null;
+      document.getElementById("newOccTitle").value = "";
+      document.getElementById("newOccDesc").value = "";
+      document.getElementById("newOccDateInput").value = "";
+      document.getElementById("newOccOneOffCheck").checked = false;
+      document.getElementById("presetOccasionSelect").value = "";
+      document.getElementById("occDateDisplay").textContent = "Select Date";
+      document.getElementById("addOccBtn").textContent = "Add Occasion";
+      document.getElementById("cancelOccEditBtn").style.display = "none";
+    }
+
+    function triggerOccDatePicker() {
+      const input = document.getElementById("newOccDateInput");
+      if (input) {
+        try { input.showPicker(); } catch(e) { input.focus(); }
+      }
+    }
+
+    function onOneOffCheckChange() {
+      const isOneOff = document.getElementById("newOccOneOffCheck").checked;
+      const dateInputVal = document.getElementById("newOccDateInput").value;
+      if (isOneOff && dateInputVal) {
+        const parts = dateInputVal.split("-");
+        activeOccasionYear = parseInt(parts[0], 10);
+        formatDateDisplayFromMmdd(parts[1] + "-" + parts[2]);
+      } else {
+        activeOccasionYear = null;
+        if (activeOccasionDateString) formatDateDisplayFromMmdd(activeOccasionDateString);
+      }
+    }
+
+    function onOccDateInputChange() {
+      const val = document.getElementById("newOccDateInput").value;
+      if (!val) return;
+      const parts = val.split("-");
+      if (parts.length >= 3) {
+        activeOccasionDateString = parts[1] + "-" + parts[2];
+        activeOccasionFloatingKey = null;
+        const isOneOff = document.getElementById("newOccOneOffCheck").checked;
+        activeOccasionYear = isOneOff ? parseInt(parts[0], 10) : null;
+        document.getElementById("presetOccasionSelect").value = "";
+        formatDateDisplayFromMmdd(activeOccasionDateString);
+      }
+    }
+
+    function formatDateDisplayFromMmdd(mmdd) {
+      const parts = mmdd.split("-");
+      const m = parseInt(parts[0], 10) - 1;
+      const d = parseInt(parts[1], 10);
+      const dateLabel = (m >= 0 && m < 12) ? (MONTHS[m] + " " + d) : mmdd;
+      document.getElementById("occDateDisplay").textContent = activeOccasionYear ? `${activeOccasionYear} ${dateLabel}` : dateLabel;
+    }
+
+    function onPresetOccasionChange() {
+      const selVal = document.getElementById("presetOccasionSelect").value;
+      if (!selVal) return;
+
+      document.getElementById("newOccOneOffCheck").checked = false;
+      activeOccasionYear = null;
+
+      const preset = OCCASION_PRESETS[selVal];
+      if (preset) {
+        document.getElementById("newOccTitle").value = preset.title;
+        document.getElementById("newOccDesc").value = preset.desc;
+      }
+
+      if (selVal.startsWith("floating:")) {
+        activeOccasionFloatingKey = selVal.replace("floating:", "");
+        activeOccasionDateString = "";
+        document.getElementById("newOccDateInput").value = "";
+        const cleanKeyName = activeOccasionFloatingKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        document.getElementById("occDateDisplay").textContent = cleanKeyName;
+      } else if (selVal.startsWith("fixed:")) {
+        activeOccasionFloatingKey = null;
+        const mmdd = selVal.replace("fixed:", "");
+        activeOccasionDateString = mmdd;
+        const currentYear = new Date().getFullYear();
+        document.getElementById("newOccDateInput").value = `${currentYear}-${mmdd}`;
+        formatDateDisplayFromMmdd(mmdd);
+      }
+    }
+
+    function renderOccasionsList() {
+      const container = document.getElementById("occasionListContainer");
+      container.innerHTML = "";
+      const cfg = activeEditorConfig;
+
+      if (!cfg.occasions || cfg.occasions.length === 0) {
+        container.innerHTML = '<p style="font-size:12px; color:#777; font-style:italic;">No built-in occasions set for this module.</p>';
+        return;
+      }
+
+      cfg.occasions.forEach((occ, idx) => {
+        const div = document.createElement("div");
+        div.style.background = "#222";
+        div.style.border = "1px solid #333";
+        div.style.borderRadius = "6px";
+        div.style.padding = "8px 10px";
+        div.style.marginBottom = "6px";
+        div.style.cursor = "pointer";
+
+        let badgeText = "";
+        if (occ.floatingKey) {
+          badgeText = "Floating: " + occ.floatingKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        } else {
+          const parts = (occ.dateString || "").split("-");
+          const m = parseInt(parts[0], 10) - 1;
+          const d = parseInt(parts[1], 10);
+          const formattedDate = (m >= 0 && m < 12) ? (MONTHS[m] + " " + d) : occ.dateString;
+          badgeText = occ.yearConstraint ? `${occ.yearConstraint} ${formattedDate} • One-Off` : formattedDate;
+        }
+
+        const topRow = document.createElement("div");
+        topRow.style.display = "flex";
+        topRow.style.justifyContent = "space-between";
+        topRow.style.alignItems = "center";
+
+        const titleDiv = document.createElement("div");
+        titleDiv.innerHTML = `<strong style="color:#b9936c;">${occ.title}</strong> <span style="font-size:11px; color:#aaa; margin-left:6px;">[${badgeText}]</span>`;
+        titleDiv.onclick = () => editOccasion(idx);
+
+        const delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.style.background = "#c0392b";
+        delBtn.style.color = "#fff";
+        delBtn.style.border = "none";
+        delBtn.style.padding = "2px 8px";
+        delBtn.style.borderRadius = "3px";
+        delBtn.style.fontSize = "12px";
+        delBtn.style.cursor = "pointer";
+        delBtn.innerHTML = "&times;";
+        delBtn.onclick = (e) => { e.stopPropagation(); removeOccasion(idx); };
+
+        topRow.appendChild(titleDiv);
+        topRow.appendChild(delBtn);
+
+        const descP = document.createElement("p");
+        descP.style.fontSize = "11px";
+        descP.style.color = "#bbb";
+        descP.style.margin = "4px 0 0 0";
+        descP.style.lineHeight = "1.3";
+        descP.textContent = occ.description || "(No description)";
+        descP.onclick = () => editOccasion(idx);
+
+        div.appendChild(topRow);
+        div.appendChild(descP);
+        container.appendChild(div);
+      });
+    }
+
+    function editOccasion(idx) {
+      const occ = activeEditorConfig.occasions[idx];
+      if (!occ) return;
+      editingOccasionIndex = idx;
+      document.getElementById("newOccTitle").value = occ.title || "";
+      document.getElementById("newOccDesc").value = occ.description || "";
+
+      if (occ.floatingKey) {
+        activeOccasionFloatingKey = occ.floatingKey;
+        activeOccasionDateString = "";
+        activeOccasionYear = null;
+        document.getElementById("newOccDateInput").value = "";
+        document.getElementById("newOccOneOffCheck").checked = false;
+        document.getElementById("occDateDisplay").textContent = occ.floatingKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        document.getElementById("presetOccasionSelect").value = "floating:" + occ.floatingKey;
+      } else {
+        activeOccasionFloatingKey = null;
+        activeOccasionDateString = occ.dateString || "";
+        activeOccasionYear = occ.yearConstraint || null;
+        document.getElementById("newOccOneOffCheck").checked = Boolean(occ.yearConstraint);
+        const yr = occ.yearConstraint || new Date().getFullYear();
+        document.getElementById("newOccDateInput").value = `${yr}-${activeOccasionDateString}`;
+        formatDateDisplayFromMmdd(activeOccasionDateString);
+        document.getElementById("presetOccasionSelect").value = occ.yearConstraint ? "" : ("fixed:" + activeOccasionDateString);
+      }
+
+      document.getElementById("addOccBtn").textContent = "Update Occasion";
+      document.getElementById("cancelOccEditBtn").style.display = "inline-block";
+    }
+
+    function addNewOccasion() {
+      const t = document.getElementById("newOccTitle").value.replace(/[.!?:;,]/g, '').trim().substring(0, 30);
+      const desc = document.getElementById("newOccDesc").value.replace(/[.!?:;,]/g, '').trim().substring(0, 300);
+
+      if (!t) {
+        showAlert("Notice", "Please enter an Occasion Title.");
+        return;
+      }
+      if (!activeOccasionFloatingKey && !activeOccasionDateString) {
+        showAlert("Notice", "Please select a date from the calendar or choose a holiday preset.");
+        return;
+      }
+
+      const occasionObj = {
+        title: t,
+        description: desc,
+        floatingKey: activeOccasionFloatingKey || null,
+        dateString: activeOccasionDateString || "",
+        yearConstraint: activeOccasionYear || null
+      };
+
+      if (editingOccasionIndex >= 0) {
+        activeEditorConfig.occasions[editingOccasionIndex] = occasionObj;
+      } else {
+        activeEditorConfig.occasions.push(occasionObj);
+      }
+
+      resetOccasionForm();
+      renderOccasionsList();
+    }
+
+    function removeOccasion(idx) {
+      activeEditorConfig.occasions.splice(idx, 1);
+      if (editingOccasionIndex === idx) resetOccasionForm();
+      renderOccasionsList();
+    }
+
+    // --- UPLOAD REFERENCE IMAGE ---
+    function openUploadRefModal() {
+      selectedRefFileBase64 = null;
+      document.getElementById("refImageFileInput").value = "";
+      document.getElementById("refFileNameInput").value = "";
+      document.getElementById("uploadRefStatus").style.display = "none";
+      document.getElementById("uploadRefSubmitBtn").disabled = true;
+      document.getElementById("uploadRefModal").style.display = "flex";
+    }
+    function closeUploadRefModal() { document.getElementById("uploadRefModal").style.display = "none"; }
+
+    function onRefFileSelected() {
+      const input = document.getElementById("refImageFileInput");
+      if (!input.files || input.files.length === 0) return;
+      const file = input.files[0];
+
+      let rawName = file.name.toLowerCase().replace(/[^a-z0-9._-]/g, '_');
+      if (!rawName.startsWith("reference_")) rawName = "reference_" + rawName;
+      if (!rawName.endsWith(".jpg") && !rawName.endsWith(".jpeg")) rawName += ".jpg";
+      document.getElementById("refFileNameInput").value = rawName;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        selectedRefFileBase64 = e.target.result.split(",")[1];
+        document.getElementById("uploadRefSubmitBtn").disabled = false;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function submitRefImageUpload() {
+      const cfg = activeEditorConfig;
+      const modId = cfg ? cfg.id : "leah";
+      const filename = document.getElementById("refFileNameInput").value.trim();
+      const btn = document.getElementById("uploadRefSubmitBtn");
+      const status = document.getElementById("uploadRefStatus");
+
+      if (!selectedRefFileBase64 || !filename) return;
+
+      btn.disabled = true;
+      status.style.display = "block";
+      status.style.color = "#ccc";
+      status.textContent = "Uploading to Drive...";
+
+      try {
+        const res = await apiPost('upload_ref_image', {
+          moduleId: modId,
+          filename: filename,
+          base64Data: selectedRefFileBase64
+        });
+
+        btn.disabled = false;
+        if (res.success) {
+          status.style.color = "#2ecc71";
+          status.textContent = "Uploaded " + res.filename + " successfully!";
+
+          availableRefImages.push({ module: cfg.name, filename: res.filename });
+          populateRefSelect("refPhoto1Select", document.getElementById("refPhoto1Select").value);
+          populateRefSelect("refPhoto2Select", document.getElementById("refPhoto2Select").value);
+          populateRefSelect("refPhoto3Select", document.getElementById("refPhoto3Select").value);
+
+          if (!document.getElementById("refPhoto1Select").value) document.getElementById("refPhoto1Select").value = res.filename;
+          else if (!document.getElementById("refPhoto2Select").value) document.getElementById("refPhoto2Select").value = res.filename;
+          else if (!document.getElementById("refPhoto3Select").value) document.getElementById("refPhoto3Select").value = res.filename;
+
+          setTimeout(() => closeUploadRefModal(), 1200);
+        } else {
+          status.style.color = "#e74c3c";
+          status.textContent = "Error: " + res.msg;
+        }
+      } catch(err) {
+        btn.disabled = false;
+        status.style.color = "#e74c3c";
+        status.textContent = "Upload failed: " + err.message;
+      }
+    }
+
+    // --- PROMPT COMPILER ---
+    function askAiYorePromptHelp() {
+      const cfg = activeEditorConfig;
+      if (cfg && cfg.id.toLowerCase() === "leah") {
+        showAlert("Sacred Prompt Locked", "Leah's Base System Prompt is sacred and permanently protected.");
+        return;
+      }
+
+      const roughNotes = document.getElementById("basePromptTextarea").value.trim();
+      const modName = cfg ? cfg.name : "Module";
+      const ref1 = document.getElementById("refPhoto1Select").value;
+      const ref2 = document.getElementById("refPhoto2Select").value;
+      const ref3 = document.getElementById("refPhoto3Select").value;
+      const refPhotos = [ref1, ref2, ref3].filter(Boolean);
+
+      const s1 = document.getElementById("slot1Select").value;
+      const s2 = document.getElementById("slot2Select").value;
+      const s3 = document.getElementById("slot3Select").value;
+      const activeSlots = [s1, s2, s3].filter(s => s && s !== "None");
+
+      showConfirm("Ask AI-yore to Craft?", `Have AI-yore structure your notes into the standard Art Direction Rulebook for ${modName}?\n\nAI-yore will incorporate your ${refPhotos.length} reference image(s) and assigned style.`, async () => {
+        const btn = document.getElementById("askAiPromptBtn");
+        btn.disabled = true;
+        btn.innerHTML = '<span>AI-yore is compiling...</span>';
+
+        try {
+          const res = await apiPost('craft_base_prompt', {
+            data: {
+              moduleName: modName,
+              roughNotes: roughNotes,
+              refPhotos: refPhotos,
+              styles: activeSlots
+            }
+          });
+
+          btn.disabled = false;
+          btn.innerHTML = '<span>&#128172; Ask AI-yore to Craft</span>';
+          if (res.success) {
+            document.getElementById("basePromptTextarea").value = res.craftedPrompt;
+            showAlert("Rulebook Compiled", "AI-yore has structured your prompt!\n\nReference image handoffs, DP freedom, and the Name Firewall have been compiled.");
+          } else {
+            showAlert("AI-yore Notice", res.msg);
+          }
+        } catch(err) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>&#128172; Ask AI-yore to Craft</span>';
+          showAlert("Error", "AI-yore error: " + err.message);
+        }
+      });
+    }
+
+    // --- COMMIT MODULE EDITS ---
+    function commitModuleEdits() {
+      const cfg = activeEditorConfig;
+      if (!cfg) return;
+
+      const name = document.getElementById("modNameInput").value.trim().substring(0, 30);
+      const quota = parseInt(document.getElementById("modQuotaInput").value, 10) || 20;
+
+      const p1Email = document.getElementById("primary1EmailInput").value.trim().toLowerCase();
+      const p1Name = document.getElementById("primary1NameInput").value.trim().substring(0, 10);
+      const p2Email = document.getElementById("primary2EmailInput").value.trim().toLowerCase();
+      const p2Name = document.getElementById("primary2NameInput").value.trim().substring(0, 10);
+
+      const primaries = [];
+      if (p1Email && p1Email.includes("@")) primaries.push({ email: p1Email, name: p1Name });
+      if (p2Email && p2Email.includes("@")) primaries.push({ email: p2Email, name: p2Name });
+
+      if (!name || primaries.length === 0) {
+        showAlert("Notice", "Module Name and at least one valid Primary email address are required.");
+        return;
+      }
+
+      const s1 = document.getElementById("slot1Select").value;
+      const s2 = document.getElementById("slot2Select").value;
+      const s3 = document.getElementById("slot3Select").value;
+      const dailySlots = [s1, s2, s3].filter(s => s && s !== "None");
+
+      if (dailySlots.length === 0) {
+        showAlert("Notice", "At least one Daily Image slot must be assigned to an active style.");
+        return;
+      }
+
+      const ref1 = document.getElementById("refPhoto1Select").value;
+      const ref2 = document.getElementById("refPhoto2Select").value;
+      const ref3 = document.getElementById("refPhoto3Select").value;
+      const seed1 = document.getElementById("seed1Select").value;
+      const seed2 = document.getElementById("seed2Select").value;
+
+      const basePrompt = document.getElementById("basePromptTextarea").value;
+      const isLeah = (cfg.id.toLowerCase() === "leah");
+      const tagColor = document.getElementById("modTagColorInput").value || (isLeah ? "#4A7D45" : "#2c3e50");
+
+      const payload = {
+        id: cfg.id,
+        name: name,
+        tagColor: tagColor,
+        isPaused: cfg.isPaused,
+        targetQuota: quota,
+        emailSubject: document.getElementById("modSubjectInput").value.trim(),
+        emailHeader: document.getElementById("modHeaderInput").value.trim(),
+        emailSubtitle: document.getElementById("modSubtitleInput").value.trim(),
+        primaryBottomNote: document.getElementById("modPrimaryBottomInput").value.trim(),
+        subscriberFooterNote: document.getElementById("modSubscriberBottomInput").value.trim(),
+        primaries: primaries,
+        scheduleDays: cfg.scheduleDays,
+        dailySlots: dailySlots,
+        styles: cfg.styles,
+        refPhotos: [ref1, ref2, ref3],
+        seedConfigs: [seed1, seed2].filter(Boolean),
+        basePrompt: basePrompt,
+        occasions: cfg.occasions
+      };
+
+      const confirmMsg = `Save and commit updates to ${name}?\n\n• Previous source code backed up to Drive\n• Primary recipient shielded in spreadsheet\n• Script file updated safely`;
+
+      showConfirm("Commit Module Changes?", confirmMsg, async () => {
+        const btn = document.getElementById("saveModuleBtn");
+        const box = document.getElementById("editorStatusBox");
+        btn.disabled = true;
+        box.style.display = "block";
+        box.className = "";
+        box.style.color = "#ccc";
+        box.textContent = "Rewriting module script and creating Drive backup...";
+
+        try {
+          const res = await apiPost('save_module_config', { data: payload });
+          btn.disabled = false;
+          if (res.success) {
+            box.className = "success";
+            box.textContent = res.msg;
+            setTimeout(() => { closeEditorView(); loadHub(); }, 1500);
+          } else {
+            box.className = "error";
+            box.textContent = res.msg;
+          }
+        } catch(err) {
+          btn.disabled = false;
+          box.className = "error";
+          box.textContent = "Error: " + err.message;
+        }
+      });
+    }
+
+    function openNewModuleModal() {
+      document.getElementById("newModId").value = "";
+      document.getElementById("newModName").value = "";
+      document.getElementById("newModEmail").value = "";
+      document.getElementById("newModDescription").value = "";
+      document.getElementById("factoryStatus").style.display = "none";
+      document.getElementById("factoryModal").style.display = "flex";
+    }
+    function closeFactoryModal() { document.getElementById("factoryModal").style.display = "none"; }
+
+    async function submitCreateModule() {
+      const id = document.getElementById("newModId").value.trim().toLowerCase();
+      const name = document.getElementById("newModName").value.trim().substring(0, 30);
+      const email = document.getElementById("newModEmail").value.trim().toLowerCase();
+      const desc = document.getElementById("newModDescription").value.trim();
+      const status = document.getElementById("factoryStatus");
+      const btn = document.getElementById("createFactoryBtn");
+
+      if (!id || !name || !email.includes("@")) {
+        status.style.display = "block";
+        status.style.color = "#e74c3c";
+        status.textContent = "Please fill in ID, Name, and a valid Email address.";
+        return;
+      }
+
+      btn.disabled = true;
+      status.style.display = "block";
+      status.style.color = "#ccc";
+      status.textContent = "Initializing Drive folders, Spreadsheet, and Form...";
+
+      try {
+        const res = await apiPost('create_new_module', { id: id, name: name, email: email, desc: desc });
+        btn.disabled = false;
+        if (res.success) {
+          status.style.color = "#2ecc71";
+          status.textContent = res.msg;
+          setTimeout(() => { closeFactoryModal(); loadHub(); }, 2000);
+        } else {
+          status.style.color = "#e74c3c";
+          status.textContent = res.msg;
+        }
+      } catch(err) {
+        btn.disabled = false;
+        status.style.color = "#e74c3c";
+        status.textContent = "Factory Error: " + err.message;
+      }
+    }
+
+    // --- CUSTOM EVENT ---
     function initCustomEventForm() {
       if (!dashboardData || !dashboardData.modules) return;
-      
-      const sel = document.getElementById('ceTargetModule');
-      sel.innerHTML = dashboardData.modules.map(m => `<option value="${m.id}">${m.name}</option>`).join("");
+      document.getElementById('ceTargetModule').innerHTML = 
+        dashboardData.modules.map(m => `<option value="${m.id}">${m.name}</option>`).join("");
       
       const now = new Date();
       now.setDate(now.getDate() + 1);
@@ -616,7 +2034,6 @@
       dInput.min = minDate;
       dInput.value = minDate;
       updateCeDateDisplay();
-
       filterCustomEventReferenceImages();
     }
 
@@ -624,12 +2041,10 @@
       const targetMod = document.getElementById('ceTargetModule').value;
       const defaults = (dashboardData && dashboardData.moduleDefaults && dashboardData.moduleDefaults[targetMod]) || [];
       const select = document.getElementById('ceReferenceImage');
-      
       select.innerHTML = '<option value="">-- No Guest Image (Module Defaults Only) --</option>';
-      
       if (dashboardData && dashboardData.refImages) {
         dashboardData.refImages.forEach(img => {
-          if (defaults.indexOf(img.filename) === -1) {
+          if (!defaults.includes(img.filename)) {
             const opt = document.createElement('option');
             opt.value = img.filename;
             opt.textContent = `${img.filename} [${img.module}]`;
@@ -667,7 +2082,7 @@
         statusBox.style.display = "block";
         statusBox.style.background = "#222";
         statusBox.style.color = "#ccc";
-        statusBox.textContent = "⚒️ Generating custom occasion assets via Gemini... Please wait about a minute...";
+        statusBox.textContent = "Generating custom occasion assets via Gemini... Please wait about a minute...";
 
         const formData = {
           moduleId: document.getElementById('ceTargetModule').value,
@@ -691,11 +2106,11 @@
       }, "#8e44ad");
     }
 
-    // --- ASSET MANAGER CONTROLLER ---
+    // --- ASSET MANAGER ---
     function initAssetManager() {
       if (!dashboardData || !dashboardData.modules) return;
-      const sel = document.getElementById('amTargetModule');
-      sel.innerHTML = dashboardData.modules.map(m => `<option value="${m.id}">${m.name}</option>`).join("");
+      document.getElementById('amTargetModule').innerHTML = 
+        dashboardData.modules.map(m => `<option value="${m.id}">${m.name}</option>`).join("");
       loadAssetManagerList();
     }
 
@@ -797,13 +2212,43 @@
       }
     }
 
+    function handleAmDeleteClick() {
+      const selBase = document.getElementById('amTargetAsset').value;
+      const modId = document.getElementById('amTargetModule').value;
+      const item = amAssetList.find(a => a.baseName === selBase);
+      if (!item) return;
+
+      const format = amShowingGif ? 'gif' : 'jpg';
+      const label = amShowingGif ? 'Animated GIF' : 'Static Artwork';
+
+      showConfirm("Delete " + label + "?", `Flag the ${label} for deletion (🗑️)?\n\nThe prompt and caption will remain safely preserved in the vault.`, async () => {
+        const statusBox = document.getElementById('amStatusBox');
+        statusBox.className = "";
+        statusBox.style.display = "block";
+        statusBox.textContent = `🗑️ Flagging ${format.toUpperCase()} for deletion...`;
+
+        try {
+          const res = await apiPost('delete_asset_media', { moduleId: modId, baseName: selBase, format: format });
+          if (res.success) {
+            statusBox.className = "success";
+            statusBox.textContent = res.msg;
+            loadAssetManagerList();
+          } else {
+            statusBox.className = "error";
+            statusBox.textContent = "⚠️ " + res.msg;
+          }
+        } catch(err) {
+          statusBox.className = "error";
+          statusBox.textContent = "⛔ Deletion failed: " + err.message;
+        }
+      }, "#c0392b");
+    }
+
     function onAmRegenChanged() {
       const regenCheck = document.getElementById('amRegenCheck');
       const selBase = document.getElementById('amTargetAsset').value;
       const item = amAssetList.find(a => a.baseName === selBase);
-
       if (regenCheck.checked && item && item.hasGif) {
-        amActiveWarningBox = regenCheck;
         document.getElementById('amGifWarningModal').style.display = 'flex';
       }
       validateAmReady();
@@ -813,9 +2258,7 @@
       const animCheck = document.getElementById('amAnimateCheck');
       const selBase = document.getElementById('amTargetAsset').value;
       const item = amAssetList.find(a => a.baseName === selBase);
-
       if (animCheck.checked && item && item.hasGif) {
-        amActiveWarningBox = animCheck;
         document.getElementById('amGifWarningModal').style.display = 'flex';
       }
       validateAmReady();
@@ -824,11 +2267,9 @@
     function resolveAmGifWarning(proceed) {
       document.getElementById('amGifWarningModal').style.display = 'none';
       if (!proceed) {
-        // Cancel unchecks BOTH boxes
         document.getElementById('amRegenCheck').checked = false;
         document.getElementById('amAnimateCheck').checked = false;
       }
-      amActiveWarningBox = null;
       validateAmReady();
     }
 
@@ -901,20 +2342,15 @@
       showConfirm("Generate Assets?", `Perform actions for ${selBase}?\n\n` + confirmLines.join("\n"), async () => {
         const btn = document.getElementById('amSubmitBtn');
         const statusBox = document.getElementById('amStatusBox');
-        const regen = document.getElementById('amRegenCheck').checked;
-        const anim = document.getElementById('amAnimateCheck').checked;
 
         btn.disabled = true;
         statusBox.className = "";
         statusBox.style.display = "block";
         statusBox.style.background = "#222";
         statusBox.style.color = "#ccc";
-        
-        let loadingMsg = "⚒️ Saving text edits to vault... Please wait...";
-        if (regen || anim) {
-          loadingMsg = "⚒️ Processing asset updates & regeneration... Please wait...";
-        }
-        statusBox.textContent = loadingMsg;
+        statusBox.textContent = (regen || anim) 
+          ? "Processing asset updates & regeneration... Please wait..." 
+          : "Saving text edits to vault... Please wait...";
 
         const payload = {
           moduleId: modId,
@@ -940,7 +2376,7 @@
       }, "#d35400");
     }
 
-    // --- AI-YORE CHAT CONTROLLER ---
+    // --- AI-YORE CHAT ---
     const CHAT_STORAGE_KEY = "adv_cockpit_aiyore_chat";
     const DEFAULT_AI_INTRO = "Oh... hello. I'm AI-yore. Eeyore’s brother. Nobody usually expects a donkey to know cloud infrastructure, but Trevor taught me how everything works so Leah's morning adventures stay safe.<br><br>Don't worry, you can't break anything here. What would you like to check?";
 
@@ -1023,6 +2459,13 @@
       localStorage.removeItem(CHAT_STORAGE_KEY);
       initChat();
     }
+
+    // Live listener for tag colour picker
+    document.addEventListener("input", function(e) {
+      if (e.target && e.target.id === "modTagColorInput") {
+        document.getElementById("tagColorHexDisplay").textContent = e.target.value.toUpperCase();
+      }
+    });
 
     document.addEventListener("DOMContentLoaded", init);
   </script>
