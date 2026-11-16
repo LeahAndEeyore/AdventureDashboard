@@ -277,6 +277,9 @@
         <div class="form-group">
           <label>Select Module</label>
           <select id="amTargetModule" onchange="loadAssetManagerList()"></select>
+          <div id="amStockpileSummary" style="font-size: 13px; font-weight: 600; color: #26a69a; margin-top: 5px; margin-left: 6px;">
+            Stockpile: Loading...
+          </div>
         </div>
         <div class="form-group">
           <label>Select Asset</label>
@@ -316,6 +319,10 @@
           <div class="checkbox-row">
             <input type="checkbox" id="amAnimateCheck" onchange="onAmAnimateChanged()" />
             <label for="amAnimateCheck">Animate with Gif Wrapper?</label>
+          </div>
+          <div class="checkbox-row" style="border: 1px dashed #7a2222; background: #201212;">
+            <input type="checkbox" id="amScrubCheck" onchange="onAmScrubChanged()" />
+            <label for="amScrubCheck" style="color: #e74c3c;">Scrub Entire Asset (Permanent Delete)</label>
           </div>
           <button class="primary-btn" id="amSubmitBtn" onclick="submitAssetManagerAction()" style="background:#d35400; margin-top:14px;" disabled>Generate Assets</button>
         </div>
@@ -1238,17 +1245,22 @@
       const sel = document.getElementById('amTargetAsset');
       document.getElementById('amPreviewContainer').style.display = 'none';
       document.getElementById('amActionControls').style.display = 'none';
-
+    
       sel.innerHTML = '<option value="">Loading eligible assets...</option>';
       const res = await apiGet('get_assets', { module: modId });
-
+    
       if (currentReq !== amRequestId) return;
-
+    
+      const summaryEl = document.getElementById('amStockpileSummary');
+      if (summaryEl) {
+        summaryEl.textContent = (res && res.stockpileDisplay) ? res.stockpileDisplay : "Stockpile: Active";
+      }
+    
       if (!res.success || !res.assets || res.assets.length === 0) {
         sel.innerHTML = '<option value="">No assets found in vault</option>';
         return;
       }
-
+    
       amAssetList = res.assets;
       sel.innerHTML = amAssetList.map(a => `<option value="${a.baseName}">${a.label}</option>`).join("");
       updateAssetPreview();
@@ -1423,6 +1435,35 @@
       validateAmReady();
     }
 
+    function onAmScrubChanged() {
+      const scrub = document.getElementById('amScrubCheck').checked;
+      const regen = document.getElementById('amRegenCheck');
+      const anim = document.getElementById('amAnimateCheck');
+    
+      if (scrub) {
+        showConfirm(
+          "Scrub Entire Asset?",
+          "Checking this will permanently erase this prompt, journal caption, and all media (JPG, GIF, MP4) from the vault.\n\nProceed?",
+          () => {
+            regen.checked = false;
+            anim.checked = false;
+            regen.disabled = true;
+            anim.disabled = true;
+            validateAmReady();
+          },
+          () => {
+            document.getElementById('amScrubCheck').checked = false;
+            validateAmReady();
+          },
+          "#c0392b"
+        );
+      } else {
+        regen.disabled = false;
+        anim.disabled = false;
+        validateAmReady();
+      }
+    }
+
     function resolveAmGifWarning(proceed) {
       document.getElementById('amGifWarningModal').style.display = 'none';
       if (!proceed) {
@@ -1464,12 +1505,16 @@
     function validateAmReady() {
       const regen = document.getElementById('amRegenCheck').checked;
       const anim = document.getElementById('amAnimateCheck').checked;
+      const scrub = document.getElementById('amScrubCheck').checked;
       const dirty = Boolean(amActiveDetails && (amActiveDetails.promptDirty || amActiveDetails.captionDirty || amActiveDetails.occasionDirty));
       const btn = document.getElementById('amSubmitBtn');
-
-      btn.disabled = (!regen && !anim && !dirty);
-
-      if (!regen && !anim && dirty) {
+    
+      btn.disabled = (!regen && !anim && !dirty && !scrub);
+    
+      if (scrub) {
+        btn.textContent = "Scrub Entire Asset 🗑️";
+        btn.style.background = "#c0392b";
+      } else if (!regen && !anim && dirty) {
         btn.textContent = "Save Text Edits";
         btn.style.background = "#2980b9";
       } else if (regen && !anim) {
@@ -1484,32 +1529,70 @@
       }
     }
 
-    function submitAssetManagerAction() {
+    async function submitAssetManagerAction() {
       const selBase = document.getElementById('amTargetAsset').value;
       const modId = document.getElementById('amTargetModule').value;
       const regen = document.getElementById('amRegenCheck').checked;
       const anim = document.getElementById('amAnimateCheck').checked;
+      const scrub = document.getElementById('amScrubCheck').checked;
       const dirty = Boolean(amActiveDetails && (amActiveDetails.promptDirty || amActiveDetails.captionDirty || amActiveDetails.occasionDirty));
-
-      if (!regen && !anim && !dirty) return;
-
+    
+      if (!regen && !anim && !dirty && !scrub) return;
+    
+      if (scrub) {
+        showConfirm(
+          "Scrub Entire Asset?",
+          `Remove ${selBase} from the vault?\n\n• Prompt & GIF will be removed\n• Artwork & Video will be safely archived to Google Photos`,
+          async () => {
+            const btn = document.getElementById('amSubmitBtn');
+            const statusBox = document.getElementById('amStatusBox');
+            btn.disabled = true;
+            statusBox.className = "";
+            statusBox.style.display = "block";
+            statusBox.textContent = "🗑️ Scrubbing asset from vault...";
+    
+            try {
+              const res = await apiPost('delete_asset_media', { moduleId: modId, baseName: selBase, format: 'all' });
+              btn.disabled = false;
+              document.getElementById('amScrubCheck').checked = false;
+              document.getElementById('amRegenCheck').disabled = false;
+              document.getElementById('amAnimateCheck').disabled = false;
+              if (res.success) {
+                statusBox.className = "success";
+                statusBox.textContent = res.msg;
+                loadAssetManagerList();
+              } else {
+                statusBox.className = "error";
+                statusBox.textContent = res.msg;
+              }
+            } catch(err) {
+              btn.disabled = false;
+              statusBox.className = "error";
+              statusBox.textContent = "⛔ Deletion failed: " + err.message;
+            }
+          },
+          "#c0392b"
+        );
+        return;
+      }
+    
       const confirmLines = [];
       if (amActiveDetails && amActiveDetails.occasionDirty) confirmLines.push("• Sync Occasion title across companion partner files");
       if (amActiveDetails && (amActiveDetails.promptDirty || amActiveDetails.captionDirty)) confirmLines.push("• Save prompt/caption edits to vault");
       if (regen) confirmLines.push("• Render image via Gemini");
       if (anim) confirmLines.push("• Generate 4s Animated GIF");
-
+    
       showConfirm("Generate Assets?", `Apply the following updates to ${selBase}?\n\n` + confirmLines.join("\n"), async () => {
         const btn = document.getElementById('amSubmitBtn');
         const statusBox = document.getElementById('amStatusBox');
-
+    
         btn.disabled = true;
         statusBox.className = "";
         statusBox.style.display = "block";
         statusBox.style.background = "#222";
         statusBox.style.color = "#ccc";
         statusBox.textContent = "⚒️ Processing asset updates & generation... Please wait...";
-
+    
         const payload = {
           moduleId: modId,
           baseName: selBase,
@@ -1522,7 +1605,7 @@
           isCaptionDirty: Boolean(amActiveDetails && amActiveDetails.captionDirty),
           isOccasionDirty: Boolean(amActiveDetails && amActiveDetails.occasionDirty)
         };
-
+    
         const res = await apiPost('generate_assets', { data: payload });
         btn.disabled = false;
         if (res.success) {
@@ -1535,7 +1618,7 @@
         }
       }, "#d35400");
     }
-
+    
     // --- MODULE MANAGER CONTROLLER ---
     function isMmHubDirty() {
       return JSON.stringify(mmCurrentOrder) !== mmOriginalHubState;
