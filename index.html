@@ -321,8 +321,8 @@
             <label for="amAnimateCheck">Animate with Gif Wrapper?</label>
           </div>
           <div class="checkbox-row" style="border: 1px dashed #7a2222; background: #201212;">
-            <input type="checkbox" id="amScrubCheck" onchange="onAmScrubChanged()" />
-            <label for="amScrubCheck" style="color: #e74c3c;">Scrub Entire Asset (Permanent Delete)</label>
+            <input type="checkbox" id="scrubAssetCheck" onchange="onScrubAssetChanged()" />
+            <label for="scrubAssetCheck" style="color: #e74c3c;">Scrub Entire Asset (Permanent Delete)</label>
           </div>
           <button class="primary-btn" id="amSubmitBtn" onclick="submitAssetManagerAction()" style="background:#d35400; margin-top:14px;" disabled>Generate Assets</button>
         </div>
@@ -1435,8 +1435,8 @@
       validateAmReady();
     }
 
-    function onAmScrubChanged() {
-      const scrub = document.getElementById('amScrubCheck').checked;
+    function onScrubAssetChanged() {
+      const scrub = document.getElementById('scrubAssetCheck').checked;
       const regen = document.getElementById('amRegenCheck');
       const anim = document.getElementById('amAnimateCheck');
     
@@ -1452,12 +1452,10 @@
             validateAmReady();
           },
           () => {
-            setTimeout(() => {
-              document.getElementById('amScrubCheck').checked = false;
-              regen.disabled = false;
-              anim.disabled = false;
-              validateAmReady();
-            }, 50);
+            document.getElementById('scrubAssetCheck').checked = false;
+            regen.disabled = false;
+            anim.disabled = false;
+            validateAmReady();
           },
           "#c0392b"
         );
@@ -1538,7 +1536,7 @@
       const modId = document.getElementById('amTargetModule').value;
       const regen = document.getElementById('amRegenCheck').checked;
       const anim = document.getElementById('amAnimateCheck').checked;
-      const scrub = document.getElementById('amScrubCheck').checked;
+      const scrub = document.getElementById('scrubAssetCheck').checked;
       const dirty = Boolean(amActiveDetails && (amActiveDetails.promptDirty || amActiveDetails.captionDirty || amActiveDetails.occasionDirty));
     
       if (!regen && !anim && !dirty && !scrub) return;
