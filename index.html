@@ -321,8 +321,8 @@
             <label for="amAnimateCheck">Animate with Gif Wrapper?</label>
           </div>
           <div class="checkbox-row" style="border: 1px dashed #7a2222; background: #201212;">
-            <input type="checkbox" id="scrubAssetCheck" onchange="onScrubAssetChanged()" />
-            <label for="scrubAssetCheck" style="color: #e74c3c;">Scrub Entire Asset (Permanent Delete)</label>
+            <input type="checkbox" id="amScrubCheck" onchange="onAmScrubChanged()" />
+            <label for="amScrubCheck" style="color: #e74c3c;">Scrub Entire Asset (Permanent Delete)</label>
           </div>
           <button class="primary-btn" id="amSubmitBtn" onclick="submitAssetManagerAction()" style="background:#d35400; margin-top:14px;" disabled>Generate Assets</button>
         </div>
@@ -589,6 +589,20 @@
         <div style="display:flex; gap:10px; justify-content:center;">
           <button onclick="resolveAmGifWarning(true)" class="primary-btn" style="background:#d35400; width:auto; padding:10px 24px; font-size:14px;">OK</button>
           <button onclick="resolveAmGifWarning(false)" class="sec-btn" style="background:#333; padding:10px 18px; font-size:14px;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRUB WARNING MODAL -->
+    <div id="amScrubWarningModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2600; justify-content:center; align-items:center;">
+      <div style="background:#1a1a1a; border:1px solid #c0392b; border-radius:12px; padding:22px; width:90%; max-width:380px; text-align:center; box-shadow:0 8px 24px rgba(0,0,0,0.6);">
+        <h3 style="color:#c0392b; font-size:18px; margin-bottom:10px;">🗑️ Scrub Entire Asset?</h3>
+        <p style="font-size:14px; color:#bbb; line-height:1.5; margin-bottom:18px;">
+          Checking this will permanently erase this prompt, journal caption, and all media (JPG, GIF, MP4) from the vault.<br><br>Proceed?
+        </p>
+        <div style="display:flex; gap:10px; justify-content:center;">
+          <button onclick="resolveAmScrubWarning(true)" class="primary-btn" style="background:#c0392b; width:auto; padding:10px 24px; font-size:14px;">Confirm</button>
+          <button onclick="resolveAmScrubWarning(false)" class="sec-btn" style="background:#333; padding:10px 18px; font-size:14px;">Cancel</button>
         </div>
       </div>
     </div>
@@ -1435,31 +1449,34 @@
       validateAmReady();
     }
 
-    function onScrubAssetChanged() {
-      const scrub = document.getElementById('scrubAssetCheck').checked;
+    function onAmScrubChanged() {
+      const scrubCheck = document.getElementById('amScrubCheck');
       const regen = document.getElementById('amRegenCheck');
       const anim = document.getElementById('amAnimateCheck');
     
-      if (scrub) {
-        showConfirm(
-          "Scrub Entire Asset?",
-          "Checking this will permanently erase this prompt, journal caption, and all media (JPG, GIF, MP4) from the vault.\n\nProceed?",
-          () => {
-            regen.checked = false;
-            anim.checked = false;
-            regen.disabled = true;
-            anim.disabled = true;
-            validateAmReady();
-          },
-          () => {
-            document.getElementById('scrubAssetCheck').checked = false;
-            regen.disabled = false;
-            anim.disabled = false;
-            validateAmReady();
-          },
-          "#c0392b"
-        );
+      if (scrubCheck.checked) {
+        document.getElementById('amScrubWarningModal').style.display = 'flex';
       } else {
+        regen.disabled = false;
+        anim.disabled = false;
+        validateAmReady();
+      }
+    }
+    
+    function resolveAmScrubWarning(proceed) {
+      document.getElementById('amScrubWarningModal').style.display = 'none';
+      const regen = document.getElementById('amRegenCheck');
+      const anim = document.getElementById('amAnimateCheck');
+      const scrubCheck = document.getElementById('amScrubCheck');
+    
+      if (proceed) {
+        regen.checked = false;
+        anim.checked = false;
+        regen.disabled = true;
+        anim.disabled = true;
+        validateAmReady();
+      } else {
+        scrubCheck.checked = false;
         regen.disabled = false;
         anim.disabled = false;
         validateAmReady();
@@ -1536,7 +1553,7 @@
       const modId = document.getElementById('amTargetModule').value;
       const regen = document.getElementById('amRegenCheck').checked;
       const anim = document.getElementById('amAnimateCheck').checked;
-      const scrub = document.getElementById('scrubAssetCheck').checked;
+      const scrub = document.getElementById('amScrubCheck').checked;
       const dirty = Boolean(amActiveDetails && (amActiveDetails.promptDirty || amActiveDetails.captionDirty || amActiveDetails.occasionDirty));
     
       if (!regen && !anim && !dirty && !scrub) return;
