@@ -1452,10 +1452,12 @@
             validateAmReady();
           },
           () => {
-            document.getElementById('amScrubCheck').checked = false;
-            regen.disabled = false;
-            anim.disabled = false;
-            validateAmReady();
+            setTimeout(() => {
+              document.getElementById('amScrubCheck').checked = false;
+              regen.disabled = false;
+              anim.disabled = false;
+              validateAmReady();
+            }, 50);
           },
           "#c0392b"
         );
